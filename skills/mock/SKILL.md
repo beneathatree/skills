@@ -238,10 +238,62 @@ Every iteration MUST satisfy all of these:
 - Default state is rendered visually
 - Hover/focus, disabled, error, loading states indicated via CSS comments or class names in the `<style>` block
 
+### State Design (First-Class, Not Afterthought)
+
+Every screen has edge cases. A dashboard with no data. A form submission that fails. A slow API call. These states are where products feel polished or broken -- and most mockups skip them entirely.
+
+**For each iteration, determine which states are relevant** based on the screen type from the brief. Not every state applies to every screen. A settings page doesn't need an empty-data state; a data table does.
+
+#### The State Catalog
+
+| State | When It's Relevant | What It Must Show |
+|---|---|---|
+| **Default / Populated** | Always. This is the main iteration you already produce. | Screen with realistic data, fully rendered. |
+| **Empty** | Data-driven screens: dashboards, lists, tables, feeds, search results, inboxes. | No data *and* an actionable next step. Never just "No data." Tell the user what to do: "You haven't logged any habits yet. Tap + to create your first one." Include a primary action if appropriate. |
+| **Error** | Forms (validation failure), data screens (fetch/API failure), destructive actions (undo failed), permission-denied scenarios. | What went wrong in plain language. Why it happened (one sentence). How to fix it (button or link). Error styling uses DESIGN.md error token color. |
+| **Loading** | Any screen that fetches data, submits a form, or performs an async action. | Skeleton placeholders (preferred) or a spinner matched to the content shape. Skeleton dimensions should match real content so there's no layout shift when data arrives. |
+| **Success / Confirmation** | After a destructive action (delete, archive), after a form save, after a payment, after an onboarding step completion. | Brief confirmation. What happened. An undo/dismiss action if appropriate. Uses DESIGN.md success token color. |
+| **Disabled / Read-only** | Screens with permissions (viewer vs editor), fields locked by workflow state, actions unavailable due to preconditions. | Visually distinct but not broken. Disabled opacity or styling from component tokens. A hint explaining *why* it's disabled (tooltip or helper text). |
+| **Edge / Overflow** | Data tables with many rows, text fields with long input, narrow viewports, user-generated content of unusual length. | Content handled gracefully: truncation with "show more", scrollable containers with visible overflow indicators, pagination, or virtual scrolling cues. |
+
+#### How States Are Delivered
+
+**Primary iteration file (`v1.html`, `v2.html`, etc.) shows the Default/Populated state.** That's the main layout the user evaluates.
+
+**Additional states are delivered as separate files alongside each iteration:**
+
+```
+mocks/
+├── dashboard-v1.html              # Default/populated (main iteration)
+├── dashboard-v1-empty.html        # Empty state
+├── dashboard-v1-error.html        # Error state (e.g., API failure)
+├── dashboard-v1-loading.html      # Loading skeleton
+├── dashboard-v2.html              # Default/populated (main iteration)
+├── dashboard-v2-empty.html        # Empty state
+├── ...
+```
+
+**Rules for state files:**
+
+1. **Produce at minimum the Empty state for any data-driven screen.** If the brief describes a list, table, feed, dashboard, inbox, or search result -- always produce the `-empty.html` variant. This is non-negotiable for data screens.
+
+2. **Produce the Error state for any screen with user input or data fetching.** Forms, submissions, API-dependent views. Show the error inline where it matters (next to the failing field, in the content area, not as a browser alert).
+
+3. **Produce the Loading state for any async/data-fetching screen.** Use skeleton placeholders that match the real content's shape and dimensions. This prevents layout shift when data arrives.
+
+4. **Skip states that don't apply.** Don't produce an empty state for a static settings page. Don't produce a loading state for a purely client-side screen. Use judgment.
+
+5. **Each state file is a complete, self-contained HTML file** -- same quality standards as the main iteration (semantic HTML, tokens only, responsive). It shares the same layout structure as its parent iteration but swaps the content for the state-specific variant.
+
+6. **State files are lightweight.** They don't need full realistic data -- they need to sell the *state* convincingly. An empty state is 3-5 elements max (icon/illustration placeholder, headline, description, CTA). A loading state is skeleton shapes. Keep them focused.
+
+7. **When presenting iterations to the user**, mention which states were produced: > "v1 includes empty + error + loading states. v2 includes empty + loading."
+
 ### Self-Check Before Presenting
 
 Before showing iterations to the user, verify every item on this checklist:
 
+**Layout & Visual:**
 - [ ] Squint test: can I rank the top 5 elements by importance in 3 seconds?
 - [ ] Primary CTA is the highest-contrast interactive element on screen
 - [ ] All colors come from DESIGN.md tokens (zero hardcoded hex)
@@ -252,6 +304,13 @@ Before showing iterations to the user, verify every item on this checklist:
 - [ ] Semantic HTML used throughout
 - [ ] Works at mobile viewport (375px) AND desktop viewport (1440px)
 - [ ] Each iteration is meaningfully different from the others
+
+**State Coverage:**
+- [ ] Empty state produced for data-driven screens (lists, tables, dashboards, feeds, search results) -- and it is actionable, not just "No data"
+- [ ] Error state produced for screens with input or data fetching -- shows what went wrong + how to fix it
+- [ ] Loading state produced for async screens -- skeleton shape matches real content dimensions (no layout shift)
+- [ ] States that do not apply were consciously skipped (not forgotten)
+- [ ] Each state file is a complete, self-contained HTML file with proper token usage
 
 ---
 
@@ -458,12 +517,17 @@ After generating all iterations:
 When the user picks an iteration:
 
 1. Copy the chosen file to `accepted/<slug>.html`
-2. Ensure the file is production-viable:
+2. **Also copy all state files** for the chosen iteration into `accepted/`:
+   - `mocks/<slug>-vN-empty.html` --> `accepted/<slug>-empty.html`
+   - `mocks/<slug>-vN-error.html` --> `accepted/<slug>-error.html`
+   - `mocks/<slug>-vN-loading.html` --> `accepted/<slug>-loading.html`
+   (Only copy state files that were produced; skip missing ones.)
+3. Ensure all files are production-viable:
    - Clean up any TODO/experimental comments
    - Verify all semantic HTML is correct
    - Verify all token references are consistent
    - Add a header comment noting: source iteration, date, and that this is the accepted scaffold
-3. **Confirm to the user** that the frozen mock is ready for development handoff
+4. **Confirm to the user** what was frozen: main mock + which states
 
 ```html
 <!--
@@ -535,16 +599,20 @@ project/
 ├── previews/
 │   └── token-preview.html ← From /design-init
 ├── mocks/
-│   ├── <screen>-v1.html   ← Your output (iteration 1)
-│   ├── <screen>-v2.html   ← Your output (iteration 2)
-│   ├── <screen>-v3.html   ← Your output (iteration 3)
-│   └── reviews/           ← Visual review artifacts (if agent-browser available)
+│   ├── <screen>-v1.html           ← Main iteration (default/populated state)
+│   ├── <screen>-v1-empty.html     ← Empty state (data-driven screens)
+│   ├── <screen>-v1-error.html     ← Error state (forms, data-fetching screens)
+│   ├── <screen>-v1-loading.html   ← Loading/skeleton state (async screens)
+│   ├── <screen>-v2.html           ← Main iteration (default/populated state)
+│   ├── <screen>-v2-empty.html     ← Empty state
+│   ├── <screen>-v3.html           ← Main iteration (default/populated state)
+│   └── reviews/                   ← Visual review artifacts (if agent-browser available)
 │       ├── <screen>-vN-desktop.png
 │       ├── <screen>-vN-mobile.png
 │       ├── <screen>-vN-desktop-snapshot.txt
 │       └── <screen>-vN-mobile-snapshot.txt
 └── accepted/
-    └── <screen>.html      ← Frozen mock (after user picks one)
+    └── <screen>.html            ← Frozen mock (after user picks one)
 ```
 
 ---
