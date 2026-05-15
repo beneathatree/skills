@@ -1,6 +1,6 @@
 # UI Workflow Skills
 
-**Two agent skills that turn conversations into production-viable HTML mockups -- grounded in real design practice, not slop.**
+**Agent skills for design-driven frontend workflows. Start with a conversation, end with production-viable HTML mockups -- grounded in real design practice, not slop.**
 
 [![Install with npx skills](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fskills.sh%2Fapi%2Fskills%2Fbeneathatree%2Fskills&query=%24.installs&label=installs&color=blue&cacheSeconds=86400)](https://skills.sh/beneathatree/skills)
 [![Skills on skills.sh](https://img.shields.io/badge/skills.sh-20%2B+agents-green)](https://skills.sh)
@@ -9,19 +9,20 @@
 
 ## What This Is
 
-A **multi-session, stateful design workflow** that lives inside your AI coding agent. Two commands work together:
+A **multi-session, stateful design workflow** that lives inside your AI coding agent. Each skill composes with the others through shared artifacts:
 
-| Command | What It Does | When to Run |
+| Skill | What It Does | When to Run |
 |---|---|---|
-| `/design-init` | Interviews you about your product, then produces a **design system** (`DESIGN.md`), **product identity** (`PRODUCT.md`), and a **preview** you can open in a browser | Once per product |
-| `/mock` | Reads your design system, takes a brief (e.g., "dashboard"), optionally asks clarifying questions, then generates **2--3 distinct HTML iterations** for you to pick from | Every screen or page |
+| `design-init` | Interviews you about your product, then produces a **design system** (`DESIGN.md`), **product identity** (`PRODUCT.md`), and a **preview** you can open in a browser | Once per product |
+| `mock` | Reads your design system, takes a brief (e.g., "dashboard"), optionally asks clarifying questions, then generates **2--3 distinct HTML iterations** for you to pick from | Every screen or page |
+| *more coming* | | |
 
 The key idea: **`/design-init` captures your product's soul once. `/mock` uses that soul every time.** Every mock feels like it belongs to the same product because they all read from the same source of truth.
 
 ## How It Works
 
 ```
-/design-init                          /mock
+design-init                           mock
      |                                  |
      v                                  v
  Conversation  -->  DESIGN.md       Brief  -->  2-3 HTML
@@ -32,11 +33,13 @@ The key idea: **`/design-init` captures your product's soul once. `/mock` uses t
                                                     one  -->  frozen
                                                               |
                                                      Production scaffold
+
+     (more skills plug into DESIGN.md + PRODUCT.md over time)
 ```
 
 ### Step 1: Establish Your Design System
 
-Run `/design-init`. The skill asks focused questions about:
+Run **`design-init`**. The skill asks focused questions about:
 
 - **What your product is** -- its reason for existing, not its feature list
 - **Who uses it** -- their situation and mental state, not their demographics
@@ -56,12 +59,12 @@ Iterate until it looks right. Say "warmer accent" or "more density" and it revis
 
 ### Step 2: Generate Mockups
 
-Run `/mock` with a brief:
+Run **`mock`** with a brief:
 
 ```text
-/mock "Dashboard for the habit tracker. Main view: today's habits
-       in a compact list, streak counts, a weekly mini-chart.
-       User is scanning, not exploring."
+> /mock "Dashboard for the habit tracker. Main view: today's habits
+>        in a compact list, streak counts, a weekly mini-chart.
+>        User is scanning, not exploring."
 ```
 
 The skill reads `DESIGN.md` and `PRODUCT.md`, then produces 2--3 HTML iterations -- each a **different approach**, not a random variation:
@@ -77,6 +80,10 @@ Pick one (or say "merge layout of v2 with density of v1"). The chosen mock is fr
 If your brief is thin -- `"User profile page"` with no job or posture context -- `/mock` pauses and asks **3--6 targeted questions** about architecture and product decisions *before* generating anything. Not about aesthetics (tokens handle those). About data flow, state model, interaction patterns, edge cases.
 
 If your brief is rich enough, it skips straight to generation. No unnecessary questions.
+
+## Growing Collection
+
+This repo started with `design-init` and `mock` -- the foundation of interview-driven design system establishment and iterative mockup generation. More skills will be added over time, each reading from and writing to the shared `DESIGN.md` + `PRODUCT.md` artifacts so everything stays consistent.
 
 ## Why This Feels Different
 
@@ -148,8 +155,9 @@ Clone or copy `skills/design-init/SKILL.md` and `skills/mock/SKILL.md` into your
 ├── skills/
 │   ├── design-init/
 │   │   └── SKILL.md                <-- Interview-driven design system establishment
-│   └── mock/
-│       └── SKILL.md                <-- Iterative HTML mockup generation
+│   ├── mock/
+│   │   └── SKILL.md                <-- Iterative HTML mockup generation
+│   └── ...                         <-- More skills coming
 └── brainstorm/                      <-- Research archive (not needed at runtime)
     ├── proposed_ui_workflow.md      <-- Full workflow specification
     ├── RESEARCH.md                  <-- Research foundations
