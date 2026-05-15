@@ -48,6 +48,12 @@ produces:
 
 ---
 
+## Output Rules
+
+- **No emoji in any output** -- conversation responses, artifact files, preview HTML comments, commit messages. Plain text only.
+- **Exception:** The user explicitly asks for emoji, or the product's brand voice (established in PRODUCT.md) calls for it.
+- **Tone:** Professional, direct, concise. Not stiff, not chatty.
+
 ## Phase 1: The Interview
 
 This is **not a form**. It's a conversation. Probe where answers change the design; infer what you can. If the user says "internal tool for data analysts," don't ask about brand personality — ask about information density and scan patterns.

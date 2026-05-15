@@ -53,6 +53,12 @@ produces:
 
 ---
 
+## Output Rules
+
+- **No emoji in any output** -- iteration descriptions, review summaries, file comments, user-facing messages. Plain text only.
+- **Exception:** The user explicitly asks for emoji, or the product's brand voice (from PRODUCT.md) calls for it.
+- **Tone:** Professional, direct, concise. Describe what you see and what you did; avoid flourish.
+
 ## Prerequisites Check
 
 Before doing anything:
