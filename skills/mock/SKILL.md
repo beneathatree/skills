@@ -183,15 +183,27 @@ After the interview, proceed to Step 2 with your enriched understanding.
 
 Produce **2–3 complete, self-contained HTML files** in `mocks/`. Each iteration is a **different approach**, not a random variation of the same layout.
 
-### Naming Convention
+### Folder Structure & Naming
+
+Each mock gets its own folder under `mocks/`. All iterations, states, and the showcase index live together:
 
 ```
-mocks/<screen-slug>-v1.html
-mocks/<screen-slug>-v2.html
-mocks/<screen-slug>-v3.html
+mocks/<screen-slug>/
+├── index.html              # Showcase: browse all approaches + states
+├── v1.html                 # Approach 1 (default/populated state)
+├── v1-empty.html           # v1 empty state
+├── v1-error.html           # v1 error state
+├── v1-loading.html         # v1 loading state
+├── v2.html                 # Approach 2 (default/populated state)
+├── v2-empty.html           # v2 empty state
+├── v3.html                 # Approach 3 (default/populated state)
+└── reviews/                # Visual review artifacts (if agent-browser available)
+    ├── v1-desktop.png
+    ├── v1-mobile.png
+    └── ...
 ```
 
-Derive `<screen-slug>` from the brief (e.g., `"dashboard"`, `"settings-notifications"`, `"user-profile"`).
+Derive `<screen-slug>` from the brief (e.g., `"dashboard"`, `"settings-notifications"`, `"onboarding-wizard"`). Use lowercase, hyphenate multi-word names.
 
 ### What Makes Iterations Distinct
 
@@ -260,17 +272,17 @@ Every screen has edge cases. A dashboard with no data. A form submission that fa
 
 **Primary iteration file (`v1.html`, `v2.html`, etc.) shows the Default/Populated state.** That's the main layout the user evaluates.
 
-**Additional states are delivered as separate files alongside each iteration:**
+**Additional states are delivered as separate files alongside each iteration inside the same folder:**
 
 ```
-mocks/
-├── dashboard-v1.html              # Default/populated (main iteration)
-├── dashboard-v1-empty.html        # Empty state
-├── dashboard-v1-error.html        # Error state (e.g., API failure)
-├── dashboard-v1-loading.html      # Loading skeleton
-├── dashboard-v2.html              # Default/populated (main iteration)
-├── dashboard-v2-empty.html        # Empty state
-├── ...
+mocks/dashboard/
+├── v1.html                 # Default/populated (main iteration)
+├── v1-empty.html           # Empty state
+├── v1-error.html           # Error state (e.g., API failure)
+├── v1-loading.html         # Loading skeleton
+├── v2.html                 # Default/populated (main iteration)
+├── v2-empty.html           # Empty state
+└── ...
 ```
 
 **Rules for state files:**
@@ -287,7 +299,76 @@ mocks/
 
 6. **State files are lightweight.** They don't need full realistic data -- they need to sell the *state* convincingly. An empty state is 3-5 elements max (icon/illustration placeholder, headline, description, CTA). A loading state is skeleton shapes. Keep them focused.
 
-7. **When presenting iterations to the user**, mention which states were produced: > "v1 includes empty + error + loading states. v2 includes empty + loading."
+### Showcase Index (`index.html`)
+
+After generating all iterations and their state variants, produce an **`index.html`** file in the mock folder. This is an interactive showcase that lets the user browse every approach and every state in one place -- no need to open files individually.
+
+**What index.html must include:**
+
+1. **Header** with the screen name, date generated, and which DESIGN.md/PRODUCT.md it was built from.
+
+2. **Approach selector** -- navigation or tabs to switch between v1, v2, v3. Each approach gets:
+   - A one-line description of what makes it distinct (same descriptions you'd give the user verbally).
+   - The default/populated state rendered inline or in an iframe.
+
+3. **State toggle** -- within each approach, buttons/tabs to switch between: Default, Empty, Error, Loading (and any other states that were produced for that approach). States that weren't produced for a given approach are hidden/disabled.
+
+4. **Responsive preview toggle** -- a button or dropdown to view the current approach+state at desktop width (1440px) vs mobile width (375px). Uses CSS transforms or iframe resizing (no page reload needed).
+
+5. **Selection indicator** -- a visible "Select this approach" button or marker on each approach. When the user picks one, note it clearly. (In practice, the user tells you which they want; this button serves as a visual affordance.)
+
+**Technical requirements for index.html:**
+
+- Self-contained single file (inline `<style>`, inline `<script>`)
+- Uses the same DESIGN.md token CSS custom properties as the iterations (so the showcase itself feels like part of the product)
+- Loads iteration/state files via `<iframe src="v1.html">` (preferred) or inline embedding. Iframes keep things simple and isolated.
+- Navigation is pure JS (no frameworks). State management via URL hash or simple variable.
+- Responsive: works on mobile and desktop.
+- Fast: no heavy assets. This is a review tool, not the product itself.
+
+**Example structure:**
+
+```html
+<!-- mocks/<screen-slug>/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><Screen Name> — Mock Showcase</title>
+  <style>
+    /* Same token custom properties from DESIGN.md */
+    :root { --color-accent: #...; /* ... */ }
+    /* Showcase layout: header, nav tabs, iframe viewport, state toggles */
+  </style>
+</head>
+<body>
+  <header>
+    <h1><Screen Name></h1>
+    <p>Generated <date> from DESIGN.md</p>
+  </header>
+  <nav class="approaches">
+    <button class="active" data-approach="v1">v1: Sidebar + dense table</button>
+    <button data-approach="v2">v2: Top nav + card grid</button>
+    <button data-approach="v3">v3: Collapsible sections</button>
+  </nav>
+  <nav class="states">
+    <button class="active" data-state="default">Default</button>
+    <button data-state="empty">Empty</button>
+    <button data-state="error">Error</button>
+    <button data-state="loading">Loading</button>
+  </nav>
+  <div class="viewport">
+    <iframe id="preview" src="v1.html" sandbox="allow-same-origin"></iframe>
+  </div>
+  <script>
+    // Simple approach + state switching logic
+    // Updates iframe src based on selections
+  </script>
+</body>
+</html>
+```
+
+7. **When presenting to the user**, tell them: > "Open `mocks/<screen-slug>/index.html` in your browser. You can switch between approaches (v1/v2/v3), toggle states (default/empty/error/loading), and preview at mobile or desktop width. Let me know which approach you want."
 
 ### Self-Check Before Presenting
 
@@ -342,20 +423,20 @@ For each HTML file (`mocks/<slug>-v1.html`, `v2.html`, `v3.html`):
 
 ```bash
 # Open the file in agent-browser (waits for page load)
-agent-browser open mocks/<slug>-vN.html
+agent-browser open mocks/<screen-slug>/vN.html
 
 # Capture desktop view (1440x900)
 agent-browser resize open --width 1440 --height 900
-agent-browser screenshot open --path mocks/reviews/<slug>-vN-desktop.png
-agent-browser snapshot open > mocks/reviews/<slug>-vN-desktop-snapshot.txt
+agent-browser screenshot open --path mocks/<screen-slug>/reviews/vN-desktop.png
+agent-browser snapshot open > mocks/<screen-slug>/reviews/vN-desktop-snapshot.txt
 
 # Capture mobile view (375x812)
 agent-browser resize open --width 375 --height 812
-agent-browser screenshot open --path mocks/reviews/<slug>-vN-mobile.png
-agent-browser snapshot open > mocks/reviews/<slug>-vN-mobile-snapshot.txt
+agent-browser screenshot open --path mocks/<screen-slug>/reviews/vN-mobile.png
+agent-browser snapshot open > mocks/<screen-slug>/reviews/vN-mobile-snapshot.txt
 ```
 
-Create the `mocks/reviews/` directory if it doesn't exist. Keep screenshots and snapshots -- they serve as an audit trail.
+Create the `mocks/<screen-slug>/reviews/` directory if it doesn't exist. Keep screenshots and snapshots -- they serve as an audit trail.
 
 #### 3b. Rendering Validation
 
@@ -494,48 +575,62 @@ These rules govern every iteration you produce:
 
 ## Step 6: Present and Select
 
-After generating all iterations:
+After generating all iterations, states, and the showcase index:
 
-1. **Tell the user** where the files are: `mocks/<slug>-v1.html`, `mocks/<slug>-v2.html`, etc.
-2. **Describe what makes each iteration distinct** in one sentence each. Focus on the strategic difference, not visual description:
-   > "- **v1**: Sidebar navigation with dense data table. Best for power users who know what they're looking for.
-   > - **v2**: Top navigation with card-based layout. Better for users who benefit from visual grouping.
+1. **Tell the user** to open the showcase: `mocks/<screen-slug>/index.html`. Explain what they can do there:
+   > "Open `mocks/<screen-slug>/index.html` in your browser. You can switch between approaches (v1/v2/v3), toggle states (default/empty/error/loading), and preview at mobile or desktop width."
+
+2. **Describe what makes each iteration distinct** in one sentence each:
+   > "- **v1**: Sidebar navigation with dense data table. Best for power users.
+   > - **v2**: Top navigation with card-based layout. Better for visual grouping.
    > - **v3**: Collapsible sections with progressive disclosure. Balances density with scannability."
 
 3. **Wait for the user's decision.** Handle these responses:
 
 | User says | You do |
 |---|---|
-| "I'll take v2" | Freeze v2 → `accepted/<slug>.html`. Confirm location. Done. |
-| "Merge v1's layout with v2's density" | Produce a new iteration incorporating both. Place in `mocks/`. Present for approval. |
-| "None of these — try [specific direction]" | Generate new iteration(s) following the feedback. Stay in bounds of DESIGN.md tokens. |
-| "Make v1 darker/more dense/lighter/etc." | Adjust within DESIGN.md token bounds. Re-render. Note: if adjustment needs new token values, suggest updating DESIGN.md instead of hacking it here. |
-| "Can I see more variations?" | Produce additional iterations (up to 5 total). Keep them distinct. |
+| "I'll take v2" | Freeze v2 and its states into `accepted/<screen-slug>/`. Confirm location. Done. |
+| "Merge v1's layout with v2's density" | Produce a new iteration incorporating both. Add to the mock folder. Update index.html. Present for approval. |
+| "None of these — try [specific direction]" | Generate new iteration(s) following the feedback. Stay in bounds of DESIGN.md tokens. Add to folder. Update index.html. |
+| "Make v1 darker/more dense/lighter/etc." | Adjust within DESIGN.md token bounds. Re-render. Update index.html. |
+| "Can I see more variations?" | Produce additional iterations (up to 5 total). Keep them distinct. Add to folder. Update index.html. |
 
 ### Freezing the Accepted Mock
 
-When the user picks an iteration:
+When the user picks an iteration, create an `accepted/<screen-slug>/` folder and copy over only the chosen approach:
 
-1. Copy the chosen file to `accepted/<slug>.html`
-2. **Also copy all state files** for the chosen iteration into `accepted/`:
-   - `mocks/<slug>-vN-empty.html` --> `accepted/<slug>-empty.html`
-   - `mocks/<slug>-vN-error.html` --> `accepted/<slug>-error.html`
-   - `mocks/<slug>-vN-loading.html` --> `accepted/<slug>-loading.html`
-   (Only copy state files that were produced; skip missing ones.)
-3. Ensure all files are production-viable:
+```
+accepted/<screen-slug>/
+├── index.html              # The accepted mock (from vN.html)
+├── empty.html             # Empty state (if produced)
+├── error.html             # Error state (if produced)
+└── loading.html           # Loading state (if produced)
+```
+
+**Steps:**
+
+1. Create `accepted/<screen-slug>/` directory.
+2. Copy the chosen `vN.html` --> `accepted/<screen-slug>/index.html` (the main mock becomes the entry point).
+3. **Copy only the state files that were produced** for the chosen iteration:
+   - `vN-empty.html` --> `accepted/<screen-slug>/empty.html`
+   - `vN-error.html` --> `accepted/<screen-slug>/error.html`
+   - `vN-loading.html` --> `accepted/<screen-slug>/loading.html`
+   - Skip any state files that don't exist (not all states apply to all screens).
+4. Ensure all files are production-viable:
    - Clean up any TODO/experimental comments
    - Verify all semantic HTML is correct
    - Verify all token references are consistent
    - Add a header comment noting: source iteration, date, and that this is the accepted scaffold
-4. **Confirm to the user** what was frozen: main mock + which states
+5. **Confirm to the user** what was frozen: main mock + which states
 
 ```html
 <!--
   Accepted mock: <screen-name>
-  Source: mocks/<slug>-vN.html
+  Source: mocks/<screen-slug>/vN.html
   Generated: <date>
   Design system: DESIGN.md (this project)
   Status: FROZEN — production scaffold
+  States included: empty, error, loading (or whichever were produced)
   To modify: edit DESIGN.md tokens, then regenerate via /mock
 -->
 ```
@@ -599,20 +694,31 @@ project/
 ├── previews/
 │   └── token-preview.html ← From /design-init
 ├── mocks/
-│   ├── <screen>-v1.html           ← Main iteration (default/populated state)
-│   ├── <screen>-v1-empty.html     ← Empty state (data-driven screens)
-│   ├── <screen>-v1-error.html     ← Error state (forms, data-fetching screens)
-│   ├── <screen>-v1-loading.html   ← Loading/skeleton state (async screens)
-│   ├── <screen>-v2.html           ← Main iteration (default/populated state)
-│   ├── <screen>-v2-empty.html     ← Empty state
-│   ├── <screen>-v3.html           ← Main iteration (default/populated state)
-│   └── reviews/                   ← Visual review artifacts (if agent-browser available)
-│       ├── <screen>-vN-desktop.png
-│       ├── <screen>-vN-mobile.png
-│       ├── <screen>-vN-desktop-snapshot.txt
-│       └── <screen>-vN-mobile-snapshot.txt
+│   ├── dashboard/               ← One folder per mock (folder name = screen slug)
+│   │   ├── index.html          # Showcase: browse approaches + states
+│   │   ├── v1.html             # Approach 1 (default state)
+│   │   ├── v1-empty.html       # v1 empty state
+│   │   ├── v1-error.html       # v1 error state
+│   │   ├── v1-loading.html     # v1 loading state
+│   │   ├── v2.html             # Approach 2
+│   │   ├── v2-empty.html       # v2 empty state
+│   │   ├── v3.html             # Approach 3
+│   │   └── reviews/            # Visual review artifacts (if agent-browser available)
+│   │       ├── v1-desktop.png
+│   │       └── ...
+│   ├── onboarding-wizard/      ← Another mock, same structure
+│   │   ├── index.html
+│   │   ├── v1.html
+│   │   └── ...
+│   └── settings-notifications/
+│       ├── index.html
+│       └── ...
 └── accepted/
-    └── <screen>.html            ← Frozen mock (after user picks one)
+    └── dashboard/              ← Frozen mock + states (one folder per screen)
+        ├── index.html         # The accepted approach (main mock)
+        ├── empty.html         # Empty state (if produced)
+        ├── error.html         # Error state (if produced)
+        └── loading.html       # Loading state (if produced)
 ```
 
 ---
