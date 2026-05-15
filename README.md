@@ -1,6 +1,6 @@
-# UI Workflow Skills
+# Agent Workflow Skills
 
-**Agent skills for design-driven frontend workflows. Start with a conversation, end with production-viable HTML mockups -- grounded in real design practice, not slop.**
+**Skills for building products with AI agents -- starting with design, expanding into engineering. Each skill composes with others through shared artifacts. Grounded in real practice, not generic defaults.**
 
 [![Install with npx skills](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fskills.sh%2Fapi%2Fskills%2Fbeneathatree%2Fskills&query=%24.installs&label=installs&color=blue&cacheSeconds=86400)](https://skills.sh/beneathatree/skills)
 [![Skills on skills.sh](https://img.shields.io/badge/skills.sh-20%2B+agents-green)](https://skills.sh)
@@ -9,17 +9,22 @@
 
 ## What This Is
 
-A **multi-session, stateful design workflow** that lives inside your AI coding agent. Each skill composes with the others through shared artifacts:
+A **multi-session, stateful workflow** for building products inside your AI coding agent. Skills compose with each other through shared artifacts -- so output from one skill becomes input for another, and everything stays consistent across sessions.
+
+### Available Now (Design)
 
 | Skill | What It Does | When to Run |
 |---|---|---|
 | `design-init` | Interviews you about your product, then produces a **design system** (`DESIGN.md`), **product identity** (`PRODUCT.md`), and a **preview** you can open in a browser | Once per product |
-| `mock` | Reads your design system, takes a brief (e.g., "dashboard"), optionally asks clarifying questions, then generates **2--3 distinct HTML iterations** for you to pick from | Every screen or page |
-| *more coming* | | |
+| `mock` | Reads your design system, takes a brief, optionally asks clarifying questions, then generates **2--3 distinct HTML iterations** for you to pick from | Every screen or page |
 
-The key idea: **`/design-init` captures your product's soul once. `/mock` uses that soul every time.** Every mock feels like it belongs to the same product because they all read from the same source of truth.
+### Coming Next (Engineering)
 
-## How It Works
+More skills will plug into the same `DESIGN.md` + `PRODUCT.md` artifacts to cover backend architecture, API design, data modeling, testing strategies, and beyond. The shared artifact model means an engineering skill will know your product's soul before it writes a single line of code.
+
+The key idea: **capture your product's identity once, then let every skill -- design or engineering -- build from that same source of truth.**
+
+## How It Works (Design Workflow)
 
 ```
 design-init                           mock
@@ -34,10 +39,10 @@ design-init                           mock
                                                               |
                                                      Production scaffold
 
-     (more skills plug into DESIGN.md + PRODUCT.md over time)
+     (engineering skills will read DESIGN.md + PRODUCT.md too)
 ```
 
-### Step 1: Establish Your Design System
+### Step 1: Establish Your Product's Foundation
 
 Run **`design-init`**. The skill asks focused questions about:
 
@@ -77,32 +82,25 @@ Pick one (or say "merge layout of v2 with density of v1"). The chosen mock is fr
 
 ### The Interview-Back Safety Net
 
-If your brief is thin -- `"User profile page"` with no job or posture context -- `/mock` pauses and asks **3--6 targeted questions** about architecture and product decisions *before* generating anything. Not about aesthetics (tokens handle those). About data flow, state model, interaction patterns, edge cases.
+If your brief is thin -- `"User profile page"` with no job or posture context -- `/mock` pauses and asks **3--6 targeted questions** about architecture and product decisions *before* generating anything. About data flow, state model, interaction patterns, edge cases.
 
 If your brief is rich enough, it skips straight to generation. No unnecessary questions.
 
 ## Growing Collection
 
-This repo started with `design-init` and `mock` -- the foundation of interview-driven design system establishment and iterative mockup generation. More skills will be added over time, each reading from and writing to the shared `DESIGN.md` + `PRODUCT.md` artifacts so everything stays consistent.
+This repo starts with design skills because that's where product clarity begins -- if you don't know what you're building and who it's for, no amount of engineering skill matters. But the collection will expand into engineering: backend architecture, API design, data modeling, testing, deployment. Every new skill reads from the same `DESIGN.md` + `PRODUCT.md` foundation, so a backend skill knows your product's constraints before it proposes a database schema.
 
 ## Why This Feels Different
 
-Most AI UI tools generate generic output because they skip two things: **upstream context** and **downstream taste**. This workflow builds both in.
+Most AI tools generate generic output because they skip two things: **upstream context** and **downstream taste**. This workflow builds both in.
 
-**Baked into every generation:**
+**What's baked into every generation:**
 
-- **37 slop anti-patterns** -- no purple-blue gradients, no glassmorphism by default, no card-in-card nesting, no lorem ipsum, no flat type hierarchy. Avoided during production, not caught afterward.
-- **UX laws applied** -- Hick's (trim choices), Fitts's (big CTAs), Jakob's (follow conventions), Miller's (chunk info), Von Restorff (one standout max).
-- **Gestalt principles** -- proximity, similarity, common region, figure/ground, continuation. Visual grouping isn't accidental.
-- **Refactoring UI rules** -- grayscale-first hierarchy thinking, color has a job, weight creates emphasis, grid alignment, spacing scale only.
-- **Nielsen's 10 heuristics** -- quality floor every iteration must satisfy.
-
-**What you get that single-pass tools don't:**
-
-- A **persistent design system** (DESIGN.md) that makes every mock consistent
-- A **product identity** (PRODUCT.md) that keeps anti-references alive across sessions
-- **Iterative selection** -- pick from approaches, don't accept whatever comes out
-- **Production scaffolds**, not throwaway screenshots -- developers build from the accepted HTML
+- **Anti-pattern knowledge** -- each domain has its own catalog of common mistakes. Design has slop patterns; engineering will have its own equivalent. Avoided during production, not caught afterward.
+- **Principles applied, not just listed** -- UX laws, Gestalt principles, Refactoring UI rules for design. SOLID principles, testing pyramids, security checklists for engineering (coming).
+- **Shared artifacts across sessions** -- `DESIGN.md` and `PRODUCT.md` persist. Switch agents, switch machines, come back next week -- the context is still there.
+- **Iterative selection** -- pick from approaches, don't accept whatever comes out.
+- **Production scaffolds** -- output you can build from, not throwaway reference material.
 
 ## Install
 
@@ -114,13 +112,13 @@ Works with **20+ agents** automatically:
 npx skills add beneathatree/skills
 ```
 
-This installs both skills into your agent's skill directory. Supported agents include Claude Code, Cursor, Codex, Copilot, Gemini CLI, Windsurf, Zed, Roo Code, Trae, pi, and more.
+Supported agents include Claude Code, Cursor, Codex, Copilot, Gemini CLI, Windsurf, Zed, Roo Code, Trae, pi, and more.
 
 Install just one skill:
 
 ```bash
 npx skills add beneathatree/skills --skill design-init
-npx skills add beneathathree/skills --skill mock
+npx skills add beneathatree/skills --skill mock
 ```
 
 ### Via GitHub (gh skill)
@@ -141,11 +139,10 @@ Clone or copy `skills/design-init/SKILL.md` and `skills/mock/SKILL.md` into your
 
 ## What This Is Not
 
-- **Not a component library generator** -- produces mockups, not shadcn clones
-- **Not a Figma replacement** -- medium is HTML in a browser, no canvas or drag-and-drop
-- **Not brand-mode design** -- optimized for product UI (dashboards, tools, interfaces). Marketing landing pages will be competent but not exceptional
-- **Not a code generator** -- accepted mocks are production-viable HTML scaffolds; routing, state, and data fetching are separate concerns
-- **Not a post-hoc slop detector** -- prevention is baked into generation constraints
+- **Not a template library** -- these skills produce output tailored to *your* product, not generic starters
+- **Not a replacement for judgment** -- the agent is a junior designer/engineer; you're the art director/tech lead
+- **Not framework-specific** -- pure markdown instructions work across any stack
+- **Not a closed set** -- starts with design, grows into engineering. The artifact model is extensible by design
 
 ## Structure
 
@@ -154,12 +151,12 @@ Clone or copy `skills/design-init/SKILL.md` and `skills/mock/SKILL.md` into your
 ├── README.md                        <-- This file
 ├── skills/
 │   ├── design-init/
-│   │   └── SKILL.md                <-- Interview-driven design system establishment
+│   │   └── SKILL.md                <-- Interview-driven product foundation
 │   ├── mock/
-│   │   └── SKILL.md                <-- Iterative HTML mockup generation
-│   └── ...                         <-- More skills coming
+│   │   └── SKILL.md                <-- Iterative mockup generation
+│   └── ...                         <-- More skills coming (design + engineering)
 └── brainstorm/                      <-- Research archive (not needed at runtime)
-    ├── proposed_ui_workflow.md      <-- Full workflow specification
+    ├── proposed_ui_workflow.md      <-- Design workflow specification
     ├── RESEARCH.md                  <-- Research foundations
     └── skills_sh_research.md        <-- Distribution strategy research
 ```
