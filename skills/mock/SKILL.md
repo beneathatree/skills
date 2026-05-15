@@ -301,30 +301,31 @@ mocks/dashboard/
 
 ### Showcase Index (`index.html`)
 
-After generating all iterations and their state variants, produce an **`index.html`** file in the mock folder. This is an interactive showcase that lets the user browse every approach and every state in one place -- no need to open files individually.
+After generating all iterations and their state variants, produce an **`index.html`** file in the mock folder. This is a **simple static navigation page** -- clean links only, no iframes, no JavaScript previewer, no viewport or state toggle controls. Users open each iteration/state file directly in their browser and rely on native browser tools (responsive design mode in DevTools) for viewport testing.
 
 **What index.html must include:**
 
-1. **Header** with the screen name, date generated, and which DESIGN.md/PRODUCT.md it was built from.
+1. **Header** with:
+   - The screen name (e.g., "User Onboarding", "Dashboard")
+   - Generation date
+   - Links or references to `DESIGN.md` and `PRODUCT.md`
 
-2. **Approach selector** -- navigation or tabs to switch between v1, v2, v3. Each approach gets:
-   - A one-line description of what makes it distinct (same descriptions you'd give the user verbally).
-   - The default/populated state rendered inline or in an iframe.
+2. **One section per approach (v1, v2, v3)**, each containing:
+   - Approach name + a short badge/label noting the **input pattern** it demonstrates (e.g., "Radio Cards", "Chip Multi-Select", "Textarea")
+   - One-line description of what makes this approach distinct from the others
+   - Direct `<a href>` links to each state variant that was produced for this approach (default/populated, empty, error, loading, etc.)
+   - The default/populated state link should be visually distinguished (e.g., accent-filled pill style)
 
-3. **State toggle** -- within each approach, buttons/tabs to switch between: Default, Empty, Error, Loading (and any other states that were produced for that approach). States that weren't produced for a given approach are hidden/disabled.
+3. **Footer hint** reminding users to open links directly and use browser DevTools responsive mode for mobile testing.
 
-4. **Responsive preview toggle** -- a button or dropdown to view the current approach+state at desktop width (1440px) vs mobile width (375px). Uses CSS transforms or iframe resizing (no page reload needed).
+**Design requirements for index.html:**
 
-5. **Selection indicator** -- a visible "Select this approach" button or marker on each approach. When the user picks one, note it clearly. (In practice, the user tells you which they want; this button serves as a visual affordance.)
-
-**Technical requirements for index.html:**
-
-- Self-contained single file (inline `<style>`, inline `<script>`)
-- Uses the same DESIGN.md token CSS custom properties as the iterations (so the showcase itself feels like part of the product)
-- Loads iteration/state files via `<iframe src="v1.html">` (preferred) or inline embedding. Iframes keep things simple and isolated.
-- Navigation is pure JS (no frameworks). State management via URL hash or simple variable.
-- Responsive: works on mobile and desktop.
-- Fast: no heavy assets. This is a review tool, not the product itself.
+- **Static HTML only. No JavaScript. No iframes.** This is a table-of-contents / navigation page, not a preview tool.
+- Self-contained single file with inline `<style>` (no external stylesheets, no CSS frameworks)
+- Uses the same DESIGN.md token CSS custom properties as the iterations (so the index feels like part of the product)
+- Professional, minimal, scannable layout -- max-width ~800px, approach cards with subtle shadow/border
+- Responsive: readable at 375px through 1440px (pure CSS, no JS needed)
+- Each state link is a pill-shaped `<a>` element with hover states using DESIGN.md tokens
 
 **Example structure:**
 
@@ -334,41 +335,46 @@ After generating all iterations and their state variants, produce an **`index.ht
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title><Screen Name> — Mock Showcase</title>
+  <title><Screen Name> — Mock Index</title>
   <style>
     /* Same token custom properties from DESIGN.md */
     :root { --color-accent: #...; /* ... */ }
-    /* Showcase layout: header, nav tabs, iframe viewport, state toggles */
+    /* Layout: page shell, header, approach cards, state-link pills */
+    /* No iframe styles, no control bar styles, no JS-driven toggles */
   </style>
 </head>
 <body>
-  <header>
-    <h1><Screen Name></h1>
-    <p>Generated <date> from DESIGN.md</p>
-  </header>
-  <nav class="approaches">
-    <button class="active" data-approach="v1">v1: Sidebar + dense table</button>
-    <button data-approach="v2">v2: Top nav + card grid</button>
-    <button data-approach="v3">v3: Collapsible sections</button>
-  </nav>
-  <nav class="states">
-    <button class="active" data-state="default">Default</button>
-    <button data-state="empty">Empty</button>
-    <button data-state="error">Error</button>
-    <button data-state="loading">Loading</button>
-  </nav>
-  <div class="viewport">
-    <iframe id="preview" src="v1.html" sandbox="allow-same-origin"></iframe>
+  <div class="page">
+    <header class="page-header">
+      <h1><Screen Name></h1>
+      <p>Generated <date> · Design tokens from <a href="../../DESIGN.md">DESIGN.md</a> · Context from <a href="../../PRODUCT.md">PRODUCT.md</a></p>
+    </header>
+
+    <section class="approach">
+      <div class="approach__header">
+        <h2>v1 — Centered Card Wizard</h2>
+        <span class="approach__badge">Radio Cards</span>
+      </div>
+      <p class="approach__desc">Single focused card with progress bar atop. One question per view...</p>
+      <ul class="state-list">
+        <li><a class="state-link state-link--default" href="v1.html">Default</a></li>
+        <li><a class="state-link" href="v1-empty.html">Empty</a></li>
+        <li><a class="state-link" href="v1-error.html">Error</a></li>
+        <li><a class="state-link" href="v1-loading.html">Loading</a></li>
+      </ul>
+    </section>
+
+    <!-- Repeat section for v2, v3 ... -->
+
+    <footer class="page-footer">
+      Open each link above directly. Use browser DevTools responsive mode for viewport testing.
+    </footer>
   </div>
-  <script>
-    // Simple approach + state switching logic
-    // Updates iframe src based on selections
-  </script>
 </body>
 </html>
 ```
 
-7. **When presenting to the user**, tell them: > "Open `mocks/<screen-slug>/index.html` in your browser. You can switch between approaches (v1/v2/v3), toggle states (default/empty/error/loading), and preview at mobile or desktop width. Let me know which approach you want."
+7. **When presenting to the user**, tell them: > "Open `mocks/<screen-slug>/index.html` in your browser. It lists every approach and state variant as direct links. Click any link to open that mock. Use your browser's responsive design mode (DevTools) to test at different viewport sizes."
 
 ### Self-Check Before Presenting
 
@@ -578,7 +584,7 @@ These rules govern every iteration you produce:
 After generating all iterations, states, and the showcase index:
 
 1. **Tell the user** to open the showcase: `mocks/<screen-slug>/index.html`. Explain what they can do there:
-   > "Open `mocks/<screen-slug>/index.html` in your browser. You can switch between approaches (v1/v2/v3), toggle states (default/empty/error/loading), and preview at mobile or desktop width."
+   > "Open `mocks/<screen-slug>/index.html` in your browser. It lists every approach and state variant as direct links -- click any to open that mock. Use your browser's responsive design mode (DevTools) to test at different viewport sizes."
 
 2. **Describe what makes each iteration distinct** in one sentence each:
    > "- **v1**: Sidebar navigation with dense data table. Best for power users.
