@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>proposed_ui_workflow</title>
+
+  <!-- Highlight.js – light theme (GitHub style) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- Mermaid diagrams -->
+  <script src="https://cdnjs.cloudflare.com/mermaid/10.9.0/mermaid.min.js"></script>
+
+  <style>
+    /* ════════════════════════════════════════════════════════════
+     *  Base & Typography
+     * ════════════════════════════════════════════════════════════ */
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      font-size: 18px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      margin: 0;
+      padding: 4rem 2rem 8rem;
+      color: #24292f;
+      background: #ffffff;
+      font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    /* Reading column — generous width, centered */
+    main {
+      max-width: 44rem;
+      margin: 0 auto;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Headings
+     * ════════════════════════════════════════════════════════════ */
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #1f2328;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-top: 0;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid #d0d7de;
+    }
+
+    h2 {
+      font-size: 1.55rem;
+      margin-top: 2.8em;
+      padding-bottom: 0.25em;
+      border-bottom: 1px solid #eaedee;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      margin-top: 2em;
+    }
+
+    h4 { font-size: 1.05rem; margin-top: 1.6em; }
+    h5, h6 { font-size: 1rem; margin-top: 1.4em; }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Body Text
+     * ════════════════════════════════════════════════════════════ */
+
+    p {
+      margin-top: 0;
+      margin-bottom: 1.25em;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Links
+     * ════════════════════════════════════════════════════════════ */
+
+    a {
+      color: #0969da;
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    a:focus-visible { outline: 2px solid #0969da; outline-offset: 2px; border-radius: 2px; }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Inline Code
+     * ════════════════════════════════════════════════════════════ */
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono",
+                   Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 0.85em;
+      background: rgba(175, 184, 193, 0.15);
+      padding: 0.2em 0.35em;
+      border-radius: 4px;
+      color: #cf222e;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Code Blocks (light theme + syntax highlighting)
+     * ════════════════════════════════════════════════════════════ */
+
+    pre {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      margin: 1.5em 0;
+      line-height: 1.55;
+      font-size: 0.87rem;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Blockquotes
+     * ════════════════════════════════════════════════════════════ */
+
+    blockquote {
+      margin: 1.5em 0;
+      padding: 0.75em 1.25em;
+      border-left: 4px solid #0969da;
+      background: #f6f8fa;
+      color: #57606a;
+      border-radius: 0 6px 6px 0;
+    }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Lists
+     * ════════════════════════════════════════════════════════════ */
+
+    ul, ol {
+      padding-left: 1.75em;
+      margin-top: 0;
+      margin-bottom: 1.25em;
+    }
+    li { margin-bottom: 0.35em; }
+    li > ul, li > ol { margin-top: 0.25em; margin-bottom: 0.25em; }
+
+    /* Task lists */
+    .task-list-item { list-style: none; margin-left: -1.5em; }
+    .task-list-item input[type="checkbox"] {
+      margin-right: 0.45em;
+      accent-color: #0969da;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Tables
+     * ════════════════════════════════════════════════════════════ */
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      font-size: 0.92rem;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #d0d7de;
+    }
+
+    thead { background: #f6f8fa; }
+    th {
+      font-weight: 600;
+      color: #1f2328;
+      text-align: left;
+    }
+    th, td {
+      padding: 0.65em 1em;
+      border-bottom: 1px solid #eaedee;
+    }
+    tbody tr:hover { background: #f6f8fa; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Horizontal Rule
+     * ════════════════════════════════════════════════════════════ */
+
+    hr {
+      height: 1px;
+      border: none;
+      background: #d0d7de;
+      margin: 3em 0;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Images
+     * ════════════════════════════════════════════════════════════ */
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin: 1.2em 0;
+      display: block;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Keyboard, Mark
+     * ════════════════════════════════════════════════════════════ */
+
+    kbd {
+      font-family: inherit;
+      font-size: 0.85em;
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 4px;
+      padding: 0.12em 0.4em;
+      box-shadow: inset 0 -1px 0 #d0d7de;
+    }
+
+    mark {
+      background: #fff3b5;
+      padding: 0.08em 0.22em;
+      border-radius: 2px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Mermaid Diagrams
+     * ════════════════════════════════════════════════════════════ */
+
+    .mermaid-wrapper {
+      margin: 1.5em 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .mermaid-wrapper > pre.mermaid {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      padding: 0;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+     *  Print
+     * ════════════════════════════════════════════════════════════ */
+
+    @media print {
+      body { padding: 2rem 1rem; }
+      main { max-width: 100%; }
+      pre { white-space: pre-wrap; word-break: break-word; }
+      a { color: inherit; text-decoration: underline; }
+    }
+  </style>
+</head>
+<body>
+  <main><h1 id="proposeduiworkflowagentdrivenfrontenddesign">Proposed UI Workflow — Agent-Driven Frontend Design</h1>
+<blockquote>
+  <p>A two-command workflow that captures a product's soul in a design system, then produces production-viable HTML mockups grounded in real design practice — not slop.</p>
+</blockquote>
+<hr />
+<h2 id="designdecisionsfrominterview">Design Decisions (from interview)</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Choice</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mode</td>
+<td><strong>Product mode</strong> — design serves the task</td>
+<td>Primary output is app UI, dashboards, tooling. Clarity &gt; decoration.</td>
+</tr>
+<tr>
+<td>Token preview</td>
+<td><strong>Style tile + rough composition</strong></td>
+<td>Both the abstract system (tile) and how it feels at density (page).</td>
+</tr>
+<tr>
+<td>Slop prevention</td>
+<td><strong>Baked into generation</strong></td>
+<td>Anti-pattern knowledge lives in the skill's instructions. Prevention, not detection. No separate check step.</td>
+</tr>
+<tr>
+<td>Mock lifecycle</td>
+<td><strong>Production starting point + optional feedback</strong></td>
+<td>Frozen mocks scaffold real code. Patterns extracted into the skill only when genuinely useful.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="theworkflowtwocommands">The Workflow — Two Commands</h2>
+<pre><code>/design-init                            /mock
+     │                                     │
+     ▼                                     ▼
+ Conversation ──────► DESIGN.md       Brief ──► 2-3 HTML
+ with the user        PRODUCT.md      +          iterations
+                      Preview HTML    DESIGN.md     │
+                                       PRODUCT.md    ▼
+                                         │        User picks
+                                         ▼        one → frozen
+                                      (iteratable)     │
+                                                        ▼
+                                                   Production
+                                                   starting point
+                                                        │
+                                                        ▼
+                                                Pattern extraction
+                                                (if warranted)
+</code></pre>
+<blockquote>
+  <p><strong><code>/design-init</code> runs once per product.</strong> It establishes the design system and product context that <code>/mock</code> reads on every subsequent call. You don't repeat it unless the product fundamentally changes direction.</p>
+</blockquote>
+<h3 id="command1designinit">Command 1: <code>/design-init</code></h3>
+<p><strong>Purpose:</strong> Understand the product well enough to produce a coherent design system. This is what a senior product designer does in a kickoff — distilled into a guided conversation. <strong>Runs once per product.</strong></p>
+<p><strong>What happens:</strong></p>
+<ol>
+<li>The skill conducts a conversation. Not a form. A real back-and-forth that covers:</li>
+</ol>
+<ul>
+<li><strong>What this product <em>is</strong></em> — its soul, its reason for existing. Not feature lists — the <em>thing</em> it does in the world. "A real-time incident management tool for SRE teams" not "a dashboard with alerts and metrics."</li>
+<li><strong>Who it serves</strong> — not demographics, but <em>situations and cognitive posture</em>. "An on-call SRE at 3am, one hand on coffee, scanning fast." Not "male, 25-34, tech-savvy."</li>
+<li><strong>The emotional register</strong> — should this feel calm, clinical, dense, airy, surgical, warm? In product mode, this is about <em>cognitive posture</em>, not decoration. What state of mind should the UI match?</li>
+<li><strong>What good looks like</strong> — references and anti-references. "Like Linear's restraint" / "Not Stripe dashboard. Not a gamified habit tracker."</li>
+<li><strong>Constraints</strong> — platform (mobile/web), density (data-heavy vs editorial), accessibility requirements, tech stack.</li>
+</ul>
+<ol>
+<li>The skill synthesizes the conversation into two artifacts (both live in the project root):</li>
+</ol>
+<ul>
+<li><strong><code>DESIGN.md</code></strong> — follows the <a href="https://github.com/google-labs-code/design.md" rel="noopener noreferrer" target="_blank">Google DESIGN.md spec</a>. YAML frontmatter with typed tokens (colors, typography, spacing, elevation, shapes, components). Markdown body with rationale for <em>why</em> those values exist. Sections in fixed order: Overview → Colors → Typography → Layout → Elevation &amp; Depth → Shapes → Components → Do's and Don'ts.</li>
+<li><strong><code>PRODUCT.md</code></strong> — the product's identity: what it is, who it's for, how it should feel, what it's not. This is the persistent soul that every subsequent <code>/mock</code> call reads. (See PRODUCT.md format section below.)</li>
+</ul>
+<ol>
+<li>The skill produces a <strong>preview HTML</strong> file — a single page with two sections:</li>
+</ol>
+<ul>
+<li><strong>Style tile</strong> at the top: color swatches, typography specimens at every scale level, button states, a card or two, spacing examples. Abstract — no real content.</li>
+<li><strong>Rough composition</strong> below: a representative page layout rendered with the tokens and placeholder-but-realistic content. Enough density to judge whether the palette and type work at actual scale.</li>
+</ul>
+<p><strong>What the user does:</strong> Opens the preview HTML in a browser. Says "colors work" or "accent is too aggressive, try warmer" or "the body text feels too small at this density." The skill revises DESIGN.md and re-renders until it's right.</p>
+<p><strong>What's baked into the skill (the knowledge base):</strong></p>
+<ul>
+<li>The full DESIGN.md spec — the skill knows how to produce valid, lint-able token files.</li>
+<li>Product-mode design principles (see §Baked-In Knowledge below).</li>
+<li>The 37 slop anti-patterns from Impeccable, reframed as <em>constraints on generation</em> (not detection rules). The skill knows these patterns exist and avoids producing them.</li>
+<li>Research foundations: Nielsen heuristics, Gestalt principles, UX laws (Hick's, Fitts's, Miller's, Jakob's), Refactoring UI rules, Don Norman's interaction model.</li>
+</ul>
+<p><strong>Interview depth:</strong> Elaborate but not trivial. The skill should ask 8-12 focused questions, not 30. It should infer what it can and probe only where the answer changes the design. If the user says "internal tool for data analysts," the skill doesn't ask about brand personality — it asks about information density and scan patterns.</p>
+<hr />
+<h3 id="command2mock">Command 2: <code>/mock</code></h3>
+<p><strong>Purpose:</strong> Produce a specific screen or page, grounded in the design system, with real hierarchy and real content — not a decorative template.</p>
+<p><strong>What the user provides:</strong> A brief. Can be terse or detailed.</p>
+<pre><code>/mock "Dashboard for the habit tracker. Main view: today's habits in a compact list, 
+       streak counts, a weekly mini-chart. User is scanning, not exploring."
+</code></pre>
+<pre><code>/mock "Settings page for notification preferences. Toggle groups by channel 
+       (email, push, SMS). User comes here to turn things OFF, not on."
+</code></pre>
+<pre><code>/mock "User profile page"
+</code></pre>
+<p>Note how the first two briefs include the user's <em>job</em> and <em>posture</em> ("scanning, not exploring" / "turn things OFF, not on"). That's the JTBD + pain point context, living where it belongs — at the screen level, not in the product definition. If the brief is terse (third example), the skill infers from PRODUCT.md — <strong>or interviews back</strong> if the brief is too thin to infer from safely (see step 1.5 below).</p>
+<p><strong>What happens:</strong></p>
+<ol>
+<li><p>The skill reads <code>DESIGN.md</code> and <code>PRODUCT.md</code> from the project root. These are non-negotiable context — every token, every constraint, every anti-reference.</p>
+<p><strong>The brief IS the task-specific context.</strong> This is where JTBD and pain points live — not in PRODUCT.md, but here, per mock. The user's brief says what the user is trying to accomplish on <em>this screen</em>, what goes wrong, what matters most. PRODUCT.md gives the skill the product's soul; the brief gives it the specific job.</p></li>
+</ol>
+<p>1.5. <strong>Interview-back (conditional — only when warranted).</strong> After reading context + brief, the skill assesses whether the brief carries enough signal to produce meaningful iterations without guessing. If the brief is thin, ambiguous, or raises architectural questions that would materially change the output, the skill pauses generation and interviews the user <em>before</em> producing any HTML.</p>
+<p><strong>When interview-back kicks in:</strong></p>
+<ul>
+<li><p>The brief is a bare noun phrase with no job/posture context (<code>"User profile page"</code>, <code>"Settings"</code>, <code>"API docs"</code>) and PRODUCT.md doesn't fill the gap sufficiently.</p></li>
+<li><p>The brief describes a screen with multiple plausible interaction models and none is implied (e.g., <code>"Data table for logs"</code> — is this real-time streaming? Paginated? Filterable? Exportable? Each produces a fundamentally different layout).</p></li>
+<li><p>The brief references concepts external to the product that aren't defined anywhere (e.g., <code>"Integrate with the CI pipeline view"</code> — what pipeline? What does integration mean here?).</p></li>
+<li><p>The brief implies state or data flow decisions that haven't been specified (e.g., <code>"Multi-step wizard for onboarding"</code> — what are the steps? What can users go back and change? What's saved between steps?).</p>
+<p><strong>When interview-back does NOT kick in:</strong></p></li>
+<li><p>The brief includes job, posture, and enough domain detail to form a coherent mental model — even if terse.</p></li>
+<li><p>PRODUCT.md + DESIGN.md together provide enough context that reasonable inferences are safe.</p></li>
+<li><p>The user explicitly said "just go" or otherwise signaled they want fast output over precision.</p>
+<p><strong>How the interview works:</strong></p></li>
+<li><p>It's a short back-and-forth — <strong>3-6 questions max</strong>, not another <code>/design-init</code>. The goal is to unblock generation, not re-establish the product.</p></li>
+<li><p>Questions target <strong>architectural and product decisions</strong>, never surface aesthetics. Examples of good questions:</p>
+<ul>
+<li><em>Data flow:</em> "Is this data read-only, or does the user mutate it here? If mutation, inline or via a detail drawer/modal?"</li>
+<li>*State model: "Does this screen need to reflect live updates (WebSocket/polling), or is it snapshot-based? How stale is acceptable?"</li>
+<li>*Interaction tradeoffs: "For the filter panel — do users typically filter by one dimension at a time (sequential), or do they build complex multi-dimension queries (compositional)? That changes whether we use faceted checkboxes or a query builder."</li>
+<li>*Edge cases: "What happens when the list is empty versus when it has 10,000 items? Is pagination needed, or virtual scrolling, or does the dataset stay small?"</li>
+<li>*Real-world usage: "Walk me through who looks at this screen and when. Is it someone deep in a task who needs density, or someone dropping in briefly who needs orientation?"</li>
+<li>*System constraints: "Does this need to integrate with an existing page/layout (e.g., embed in a sidebar, fit inside a modal), or is it a full standalone page?"</li>
+<li>*Accessibility: "Are there specific accessibility requirements beyond WCAG AA — keyboard-only navigation patterns, screen reader workflows, high-contrast mode support?"</li></ul></li>
+<li><p>Examples of questions the interview <strong>avoids</strong> (too surface, better answered by tokens or inference):</p>
+<ul>
+<li>"What color should the primary button be?" → DESIGN.md already has this.</li>
+<li>"Should it feel modern or classic?" → PRODUCT.md captures emotional register.</li>
+<li>"Do you want cards or a table?" → This is the skill's job to decide and show as iteration variance.</li></ul></li>
+<li><p>The skill synthesizes answers into an enriched internal brief, then proceeds to step 2. No artifact is written — the enrichment lives only in the generation context for this mock call.</p></li>
+</ul>
+<ol>
+<li>The skill produces <strong>2-3 iterations</strong> of a single-page HTML file. Each iteration is a <em>different approach</em>, not a random variation:</li>
+</ol>
+<ul>
+<li><p>Different layout strategy (e.g., sidebar nav vs top nav, card grid vs table, tabs vs accordion).</p></li>
+<li><p>Different density/whitespace tradeoffs within the token system.</p></li>
+<li><p>Different information hierarchy emphasis — what's above the fold, what's secondary.</p>
+<p>Each iteration is a complete, self-contained HTML file. It renders in a browser. It uses only tokens from DESIGN.md. It includes real (or realistic) content shaped by PRODUCT.md.</p></li>
+</ul>
+<ol>
+<li><strong>What the skill does NOT do (slop prevention baked in):</strong></li>
+</ol>
+<ul>
+<li><p>No purple-blue gradients unless DESIGN.md explicitly specifies purple-blue.</p></li>
+<li><p>No glassmorphism unless the elevation strategy calls for blur-based layering.</p></li>
+<li><p>No side-tab accent borders on cards.</p></li>
+<li><p>No card-in-card-in-card nesting without a hierarchy reason.</p></li>
+<li><p>No Inter/Roboto as default — type comes from DESIGN.md tokens or the skill proposes something intentional.</p></li>
+<li><p>No icon tiles stacked above headings (the universal AI feature-card template).</p></li>
+<li><p>No sparklines as decoration.</p></li>
+<li><p>No gradient text.</p></li>
+<li><p>No monospace-as-"developer" shorthand.</p></li>
+<li><p>No flat type hierarchy (sizes must have ≥1.25 ratio between steps — Refactoring UI).</p></li>
+<li><p>No redundant UX writing (label, sublabel, helper, and hint all saying the same thing).</p></li>
+<li><p>No lorem ipsum — ever. Real content from PRODUCT.md, or realistic placeholder that matches the domain.</p></li>
+<li><p>No decoration without a task justification.</p>
+<p>These aren't checked after the fact. They're part of the skill's generation instructions. The model knows not to produce them the same way a trained designer knows not to.</p></li>
+</ul>
+<ol>
+<li><strong>Product-mode generation rules (always active):</strong></li>
+</ol>
+<ul>
+<li><strong>Start with the feature, not the layout.</strong> (Refactoring UI.) What is the user doing on this screen? Design the primary interaction first, then arrange around it.</li>
+<li><strong>Hierarchy is the master skill.</strong> Every element has a clear rank. If you squint, you can still tell what matters most.</li>
+<li><strong>Function over form.</strong> Every visual choice must reference a user task or a hierarchy goal. If it doesn't help the user do the thing, it doesn't belong.</li>
+<li><strong>Conventions over novelty.</strong> (Jakob's Law.) Nav goes where nav goes. Search goes where search goes. Deviate only with explicit justification from the brief.</li>
+<li><strong>Density serves scanning.</strong> In product mode, screens are tools. Users are trying to extract information or complete an action, not have an experience.</li>
+<li><strong>States are real.</strong> Every interactive element: default, hover/focus, empty, error, loading. At minimum, the HTML should show the default state with comments or CSS classes indicating other states exist.</li>
+<li><strong>Content is the design.</strong> Layout is shaped around real copy and real data, never the inverse.</li>
+<li><strong>De-emphasize rather than over-emphasize.</strong> (Refactoring UI.) When the primary element isn't standing out enough, make competing elements quieter — don't make the primary louder.</li>
+</ul>
+<ol>
+<li><p>The user reviews the iterations, picks one (or says "merge the layout of 2 with the density of 1"), and the chosen mock is <strong>frozen</strong>.</p></li>
+<li><p><strong>Frozen mock → production scaffold.</strong> The frozen HTML isn't throwaway reference. It's a starting point for real implementation — semantic HTML, accessible markup, clean token-based styling. The mock <em>is</em> the prototype. When it's time to build for real, developers work from the accepted HTML, not from a screenshot.</p></li>
+<li><p><strong>Pattern extraction (optional, lazy).</strong> Over time, if the user freezes 5+ mocks and clear patterns emerge ("this team always picks the dense table variant, never the card grid"), those patterns can be written back into the skill's knowledge. This is manual/judicious, not automatic. The principle is: update the skill only when it would change a future decision.</p></li>
+</ol>
+<hr />
+<h2 id="filestructureinaproject">File Structure in a Project</h2>
+<pre><code>project/
+├── DESIGN.md              # Design system (Google spec format)
+├── PRODUCT.md             # Product soul — identity, audience, posture, anti-references
+├── previews/
+│   └── token-preview.html # Style tile + rough composition from /design-init
+├── mocks/
+│   ├── dashboard-v1.html  # Iteration 1
+│   ├── dashboard-v2.html  # Iteration 2
+│   └── dashboard-v3.html  # Iteration 3
+└── accepted/
+    └── dashboard.html     # Frozen mock → production scaffold
+</code></pre>
+<hr />
+<h2 id="designmdformatfollowinggooglespec">DESIGN.md Format — Following Google Spec</h2>
+<p>The DESIGN.md file follows the <a href="https://github.com/google-labs-code/design.md" rel="noopener noreferrer" target="_blank">google-labs-code/design.md</a> specification exactly. Key points:</p>
+<ul>
+<li><strong>YAML frontmatter</strong> with typed design tokens: colors (<code>#hex</code>), typography (objects with <code>fontFamily</code>, <code>fontSize</code>, <code>fontWeight</code>, <code>lineHeight</code>, <code>letterSpacing</code>), spacing (dimensions in <code>px</code>/<code>rem</code>), rounded corners, and component definitions.</li>
+<li><strong>Token references</strong> use <code>{path.to.token}</code> syntax (e.g., <code>{colors.accent}</code> inside component definitions).</li>
+<li><strong>Markdown body</strong> with 8 sections in fixed order:</li>
+</ul>
+<ol>
+<li>Overview (brand personality, emotional register, target audience)</li>
+<li>Colors (palettes with semantic roles + rationale)</li>
+<li>Typography (scale levels with roles — headline, body, label, caption)</li>
+<li>Layout (grid/spacing strategy)</li>
+<li>Elevation &amp; Depth (shadow strategy or flat alternatives)</li>
+<li>Shapes (corner radii, shape language)</li>
+<li>Components (buttons, inputs, cards — styled via token references)</li>
+<li>Do's and Don'ts (explicit guardrails)</li>
+</ol>
+<p><strong>Why this format:</strong> It's the emerging standard. Google Stitch, Impeccable, and other tools all consume it. It's both human-readable and machine-parseable. It has a CLI validator (<code>npx @google/design.md lint</code>). Using it means your design system is portable — it works with other tools in the ecosystem, not just ours.</p>
+<hr />
+<h2 id="productmdformat">PRODUCT.md Format</h2>
+<p>PRODUCT.md captures the product's <strong>soul</strong> — its identity, purpose, and personality. It is not a task list, not a backlog, and not a spec. It's the persistent context that makes every mock feel like it belongs to the same product.</p>
+<p>JTBD and pain points live at the screen level, in <code>/mock</code> briefs — because they change per screen. PRODUCT.md captures what <em>doesn't</em> change: what this thing is, who it's for, how it should feel.</p>
+<pre><code class="markdown language-markdown"># PRODUCT.md
+
+## What This Is
+One sentence. The product's reason for existing.
+"A real-time incident management tool for on-call SRE teams."
+Not a feature list. Not a pitch. The *thing*.
+
+## Who It's For
+Situations and cognitive posture, not demographics.
+"An on-call SRE at 3am, one hand on coffee, scanning a dashboard for anomalies.
+Not browsing. Not exploring. Scanning."
+
+## How It Should Feel
+3-5 attributes describing the cognitive posture of the UI.
+- Calm — even when the data says panic
+- Clinical — no decoration, no cheerleading
+- Dense — information density is a feature, not a bug
+- Quietly competent — it works, it doesn't perform
+
+## What It's Not (Anti-References)
+"NOT a Stripe clone. NOT a gamified dashboard with streaks and badges.
+NOT pastel. NOT playful."
+
+## What Good Looks Like (References)
+"Linear's restraint. Grafana's information density. Bloomberg Terminal's disregard for beauty."
+
+## Constraints
+- Platform: web, desktop-first
+- Density: data-heavy — screens are tools, not experiences
+- Accessibility: WCAG AA minimum
+- Tech: HTML + Tailwind
+
+## Design Mode
+Product. Design serves the task.
+</code></pre>
+<hr />
+<h2 id="bakedinknowledgewhatlivesinsidetheskill">Baked-In Knowledge — What Lives Inside the Skill</h2>
+<p>The skill is not a thin wrapper around an LLM. It carries a knowledge base that shapes every generation. This is the cumulative product of our research.</p>
+<h3 id="adesignprinciplesproductmode">A. Design Principles (Product Mode)</h3>
+<p>These are active constraints, not aspirational quotes:</p>
+<ol>
+<li><strong>Function before form.</strong> Every visual decision must reference a user task or hierarchy goal.</li>
+<li><strong>Hierarchy is the master skill.</strong> Most "bad design" is flat hierarchy, not ugliness. Squint test: can you rank the top 5 elements by importance in 3 seconds?</li>
+<li><strong>Start with the feature, not the layout.</strong> (Refactoring UI.) Design the primary interaction, then arrange around it.</li>
+<li><strong>De-emphasize, don't over-emphasize.</strong> When the primary element isn't standing out, make competing elements quieter — don't add more visual weight to the primary.</li>
+<li><strong>Conventions > novelty.</strong> (Jakob's Law.) Users expect your product to work like others they already know. Deviate only with justification.</li>
+<li><strong>Content is the design.</strong> Layout is shaped around real copy and real data. Never the inverse.</li>
+<li><strong>Tokens are the only source of visual values.</strong> No hardcoded hex, no magic pixels. If something is needed, add it to DESIGN.md first.</li>
+<li><strong>Density serves scanning.</strong> In product mode, users are extracting information or completing actions. Respect their time.</li>
+</ol>
+<h3 id="buxlawsappliednotacademic">B. UX Laws (Applied, Not Academic)</h3>
+<table>
+<thead>
+<tr>
+<th>Law</th>
+<th>How it shapes generation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hick's</strong></td>
+<td>Primary screens ≤7 top-level choices. If there are more, group or nest.</td>
+</tr>
+<tr>
+<td><strong>Fitts's</strong></td>
+<td>Primary CTA ≥44px touch target. Destructive actions separated from primary actions.</td>
+</tr>
+<tr>
+<td><strong>Miller's</strong></td>
+<td>Chunk information into ≤7 groups. Use visual grouping (Gestalt proximity).</td>
+</tr>
+<tr>
+<td><strong>Jakob's</strong></td>
+<td>Follow conventions for nav, search, forms, tables. Deviate only when the brief demands it.</td>
+</tr>
+<tr>
+<td><strong>Von Restorff</strong></td>
+<td>Use distinctiveness sparingly — for the single most important action on screen.</td>
+</tr>
+<tr>
+<td><strong>Tesler's</strong></td>
+<td>Complexity lives somewhere. Don't hide it from the user; reduce it by solving the right problem.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cgestaltprinciplesvisualgroupingrules">C. Gestalt Principles (Visual Grouping Rules)</h3>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Application</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Proximity</strong></td>
+<td>Related items closer together than unrelated. Spacing tokens enforce this.</td>
+</tr>
+<tr>
+<td><strong>Similarity</strong></td>
+<td>Same-role items share visual treatment (color, size, weight).</td>
+</tr>
+<tr>
+<td><strong>Common Region</strong></td>
+<td>Containers used only when grouping needs reinforcement. Don't box everything.</td>
+</tr>
+<tr>
+<td><strong>Figure/Ground</strong></td>
+<td>Primary content separable from background. No camouflage.</td>
+</tr>
+<tr>
+<td><strong>Continuation</strong></td>
+<td>Alignment guides the eye. Use it deliberately, don't break it accidentally.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dtheslopcatalog37antipatternsfromimpeccablereframedasgenerationconstraints">D. The Slop Catalog — 37 Anti-Patterns (from Impeccable, reframed as generation constraints)</h3>
+<p>These are <strong>generation constraints</strong>, not detection rules. The skill knows these patterns and avoids producing them. No separate check step.</p>
+<p><strong>Visual slop:</strong></p>
+<ul>
+<li>No purple-to-blue gradients unless DESIGN.md specifies that palette.</li>
+<li>No glassmorphism / blur effects unless elevation strategy explicitly calls for it.</li>
+<li>No side-tab accent borders on cards (thick colored stripe on one side).</li>
+<li>No rounded rectangles with generic drop shadows as the only shape language.</li>
+<li>No gradient text on headings.</li>
+<li>No sparklines as decoration (tiny charts conveying no real information).</li>
+<li>No reaching for modals by reflex. If the content needs scrolling and columns, it's a page, not a modal.</li>
+</ul>
+<p><strong>Typography slop:</strong></p>
+<ul>
+<li>No flat type hierarchy. Font sizes must have ≥1.25 ratio between steps.</li>
+<li>No icon tiles stacked above headings (the universal AI feature-card pattern).</li>
+<li>No monospace as "technical" shorthand.</li>
+<li>No single font for everything. Pair a display/heading face with a body face.</li>
+<li>No overused fonts (Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, Space Grotesk) unless DESIGN.md explicitly chooses them with awareness that they're common.</li>
+<li>No all-caps body text. Uppercase is for short labels and headings only.</li>
+</ul>
+<p><strong>Layout slop:</strong></p>
+<ul>
+<li>No card-in-card-in-card nesting (Cardocalypse) without hierarchy justification.</li>
+<li>No copy-paste section layouts where every section uses the same template.</li>
+<li>No massive icon containers larger than the content they introduce.</li>
+<li>No hero-section-metrics-features-CFAQ-footer formulaic page structure as default.</li>
+</ul>
+<p><strong>Content slop:</strong></p>
+<ul>
+<li>No redundant UX writing (label + sublabel + helper + hint all saying the same thing).</li>
+<li>No lorem ipsum. Ever.</li>
+<li>No generic copy ("The best solution for your needs", "Welcome to our platform").</li>
+<li>No empty state that just says "No data." — it should be actionable.</li>
+</ul>
+<p><strong>Interaction slop:</strong></p>
+<ul>
+<li>No animation without purpose. Motion is feedback, not decoration.</li>
+<li>No bouncing/wiggling elements as attention-grabbers.</li>
+</ul>
+<h3 id="erefactoringuirulespracticalapplication">E. Refactoring UI Rules (Practical Application)</h3>
+<ul>
+<li>Design in grayscale first — ensure hierarchy works through size, weight, and spacing before adding color. (The skill applies this mentally during generation; the output is colored, but the hierarchy was established without relying on color.)</li>
+<li>Add color deliberately — color has a job (identify primary actions, indicate state, brand recognition). It's not filler.</li>
+<li>Use font weight for hierarchy — don't go below 400 for body text; use 600-700 for emphasis.</li>
+<li>Align elements to a grid — don't center everything. Left-alignment creates stronger vertical lines.</li>
+<li>Use consistent spacing scale — all values from DESIGN.md tokens.</li>
+</ul>
+<hr />
+<h2 id="implementationplanbuildorder">Implementation Plan — Build Order</h2>
+<h3 id="phase0theknowledgebasehighestleveragedofirst">Phase 0: The Knowledge Base (highest leverage, do first)</h3>
+<p>Before any code, encode the skill's knowledge:</p>
+<ol>
+<li><strong>Write the skill's system prompt / instructions file.</strong> This is the core artifact. It contains:</li>
+</ol>
+<ul>
+<li>The generation constraints (principles + UX laws + Gestalt + slop anti-patterns + Refactoring UI rules) — all §A-E above.</li>
+<li>The <code>/design-init</code> conversation script — what to ask, in what order, how to probe deeper.</li>
+<li>The DESIGN.md spec — how to produce valid files.</li>
+<li>The mock generation protocol — how to produce iterations, how to extract JTBD/pain points from the brief.</li>
+<li>Product-mode rules.</li>
+</ul>
+<ol>
+<li><strong>Validate with a dry run.</strong> Manually simulate the <code>/design-init</code> conversation with a test product. Check that the DESIGN.md output passes <code>npx @google/design.md lint</code>.</li>
+</ol>
+<h3 id="phase1designinitskill">Phase 1: <code>/design-init</code> Skill</h3>
+<p>Build as a slash command (runs once per product):</p>
+<ul>
+<li>Conducts a conversation about the product's soul, audience, posture, and constraints.</li>
+<li>Produces DESIGN.md (Google spec, valid YAML frontmatter + markdown body).</li>
+<li>Produces PRODUCT.md (product identity — soul, not tasks).</li>
+<li>Produces preview HTML (style tile + rough composition).</li>
+<li>Supports iteration: user can say "warmer accent" or "more density" and get revised DESIGN.md + re-rendered preview.</li>
+</ul>
+<h3 id="phase2mockskill">Phase 2: <code>/mock</code> Skill</h3>
+<p>Build as a slash command (runs many times per product):</p>
+<ul>
+<li>Reads DESIGN.md + PRODUCT.md.</li>
+<li>Takes a brief — this is where JTBD and pain points live, per screen.</li>
+<li><strong>Interview-back (conditional):</strong> Assesses brief depth after reading context. If thin/ambiguous or implies unresolved architectural choices, asks 3-6 targeted questions about data flow, state model, interaction tradeoffs, edge cases, usage context, system constraints, or accessibility — never surface aesthetics. Skips if brief is sufficient or user signals "just go."</li>
+<li>Extracts the user's job and posture from the brief; supplements with PRODUCT.md when brief is terse.</li>
+<li>Produces 2-3 HTML iterations with different layout approaches.</li>
+<li>All iterations use only DESIGN.md tokens.</li>
+<li>No slop (generation constraints baked in).</li>
+<li>User picks one → moves to <code>accepted/</code>.</li>
+</ul>
+<h3 id="phase3patternextractionlazymanual">Phase 3: Pattern Extraction (lazy, manual)</h3>
+<p>Over time, if clear patterns emerge from accepted mocks, update the skill's knowledge. This is manual curation, not automation. The bar is: "would this change a future generation decision?" If yes, add it. If not, don't.</p>
+<hr />
+<h2 id="whatthisisnot">What This Is Not</h2>
+<ul>
+<li><strong>Not a component library generator.</strong> It produces mockups, not a shadcn clone. Components in DESIGN.md are style definitions, not code packages.</li>
+<li><strong>Not a Figma replacement.</strong> There's no canvas, no vector editing, no drag-and-drop. The medium is HTML viewed in a browser.</li>
+<li><strong>Not brand-mode design.</strong> It's optimized for product UI. If you need a stunning marketing landing page with bespoke illustration and motion design, this workflow will produce competent but not exceptional output.</li>
+<li><strong>Not multi-step detection.</strong> Slop prevention is baked into generation constraints, not a post-hoc checking pipeline. The skill avoids producing slop; it doesn't catch slop after the fact.</li>
+<li><strong>Not a code generator.</strong> Accepted mocks are production-viable HTML, but the workflow stops at the mock. Turning them into a real app with routing, state, and data fetching is a separate concern.</li>
+</ul>
+<hr />
+<h2 id="openquestionstorevisit">Open Questions to Revisit</h2>
+<ol>
+<li><p><strong>How terse can the brief be?</strong> <em>(Mostly resolved by interview-back.)</em> If someone types <code>/mock "user profile"</code> and PRODUCT.md provides enough context to form a safe mental model, the skill generates and notes assumptions. If the brief is thin <em>and</em> PRODUCT.md doesn't fill the gap — or if the brief implies unresolved architectural choices — interview-back kicks in (step 1.5). The threshold is: <strong>would guessing produce a mock that's likely wrong in a way the user would catch immediately?</strong> If yes, ask. If no, generate and iterate. Remaining nuance: calibrating the "thinness threshold" so it doesn't over-fire on competent users who prefer terse briefs.</p></li>
+<li><p><strong>How many iterations?</strong> 2-3 is the default. Should this be configurable? Probably — let the user say <code>/mock --iterations 5 "..."</code> if they want more exploration.</p></li>
+<li><p><strong>Cross-page consistency.</strong> If you generate a dashboard mock and a settings mock separately, how do you ensure they feel like the same product? DESIGN.md + PRODUCT.md should handle this, but it's worth testing.</p></li>
+<li><p><strong>Mobile variants.</strong> Should each iteration include a responsive/mobile view, or is that a separate <code>/mock</code> call with <code>--mobile</code>? I'd recommend: include a basic responsive view in the same HTML file (visible on viewport resize), but don't design two separate layouts per iteration.</p></li>
+</ol>
+<hr />
+<h2 id="relationshiptoresearchmd">Relationship to RESEARCH.md</h2>
+<p>This proposal is the practical distillation of the research in <code>RESEARCH.md</code>. The theoretical foundations (Nielsen, Gestalt, UX Laws, Refactoring UI, Atomic Design) are all here — but encoded as generation constraints in the skill's knowledge base, not as separate artifacts in the pipeline. The multi-agent pipeline from the research document has been collapsed into two commands with baked-in expertise. This is simpler, faster, and harder to get wrong.</p>
+<p>The key insight from the research that this workflow preserves: <strong>the three artifacts that matter most are the design system (DESIGN.md), the product's soul (PRODUCT.md), and the critique criteria (baked into the skill).</strong> Everything else is orchestration.</p></main>
+
+  <script>
+    // Syntax highlighting for code blocks
+    document.querySelectorAll("pre code:not(.mermaid)").forEach(function (block) {
+      hljs.highlightElement(block);
+    });
+
+    // Mermaid diagram rendering
+    mermaid.initialize({ startOnLoad: false, theme: "default", securityLevel: "loose" });
+    document.querySelectorAll("pre.mermaid").forEach(function (el) {
+      var div = document.createElement("div");
+      div.classList.add("mermaid");
+      div.textContent = el.textContent;
+      el.parentNode.replaceChild(div, el);
+    });
+    mermaid.run();
+  </script>
+</body>
+</html>

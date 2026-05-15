@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RESEARCH</title>
+  <style>
+    /* ── Reset & Base ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      font-size: 18px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fdfdfd;
+      color: #2c2c2c;
+      font-family:
+        "Inter", "Segoe UI", "Helvetica Neue",
+        -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.8;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ── Layout ──────────────────────────────────────────────────── */
+    .page {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 8rem;
+    }
+
+    /* ── Headings ────────────────────────────────────────────────── */
+    h1, h2, h3, h4, h5, h6 {
+      color: #1a1a1a;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-top: 2.5em;
+      margin-bottom: 0.8em;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-top: 0;
+      padding-bottom: 0.4em;
+      border-bottom: 2px solid #e8e8e8;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 1.65rem;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid #eeeeee;
+      letter-spacing: -0.01em;
+    }
+
+    h3 { font-size: 1.3rem; }
+    h4 { font-size: 1.1rem; }
+
+    /* ── Paragraphs ──────────────────────────────────────────────── */
+    p {
+      margin-top: 0;
+      margin-bottom: 1.4em;
+    }
+
+    /* ── Links ───────────────────────────────────────────────────── */
+    a {
+      color: #2563eb;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s ease;
+    }
+
+    a:hover {
+      border-bottom-color: #2563eb;
+    }
+
+    /* ── Inline Code ─────────────────────────────────────────────── */
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "SF Mono",
+                   "Cascadia Code", Menlo, Consolas, monospace;
+      font-size: 0.85em;
+      background: #f3f4f6;
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: #d63384;
+    }
+
+    /* ── Code Blocks ─────────────────────────────────────────────── */
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 8px;
+      padding: 1.25em 1.5em;
+      overflow-x: auto;
+      margin: 1.6em 0;
+      line-height: 1.6;
+      font-size: 0.88rem;
+      border: 1px solid #313244;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    /* ── Blockquotes ─────────────────────────────────────────────── */
+    blockquote {
+      margin: 1.6em 0;
+      padding: 0.6em 1.4em;
+      border-left: 4px solid #2563eb;
+      background: #f0f4ff;
+      color: #374151;
+      border-radius: 0 6px 6px 0;
+    }
+
+    blockquote p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── Lists ───────────────────────────────────────────────────── */
+    ul, ol {
+      padding-left: 1.6em;
+      margin-top: 0;
+      margin-bottom: 1.4em;
+    }
+
+    li {
+      margin-bottom: 0.4em;
+    }
+
+    li > ul, li > ol {
+      margin-top: 0.3em;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── Tables ──────────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.6em 0;
+      font-size: 0.92rem;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+
+    thead {
+      background: #f9fafb;
+    }
+
+    th {
+      font-weight: 600;
+      color: #374151;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.65em 1em;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    tbody tr:hover {
+      background: #f0f4ff;
+    }
+
+    /* ── Horizontal Rule ─────────────────────────────────────────── */
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        #d1d5db,
+        transparent
+      );
+      margin: 3em 0;
+    }
+
+    /* ── Images ──────────────────────────────────────────────────── */
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin: 1.2em 0;
+      display: block;
+    }
+
+    /* ── Keyboard shortcuts ──────────────────────────────────────── */
+    kbd {
+      font-family: inherit;
+      font-size: 0.85em;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 0.1em 0.4em;
+      box-shadow: 0 1px 0 #d1d5db;
+    }
+
+    /* ── Mark / Highlight ────────────────────────────────────────── */
+    mark {
+      background: #fef08a;
+      padding: 0.1em 0.2em;
+      border-radius: 2px;
+    }
+
+    /* ── Definition lists (from showdown extension) ──────────────── */
+    dt { font-weight: 600; margin-top: 0.8em; }
+    dd { margin-left: 1.5em; margin-bottom: 0.4em; }
+
+    /* ── Source footer ───────────────────────────────────────────── */
+    .source-footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.82rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    /* ── Print styles ────────────────────────────────────────────── */
+    @media print {
+      body { background: #fff; }
+      .page { max-width: 100%; padding: 0; }
+      a { color: inherit; border-bottom: none; }
+      pre { border: 1px solid #ddd; }
+    }
+  </style>
+</head>
+<body>
+  <article class="page">
+    <h1 id="agentworkflowforhtmluiuxdesignresearchrecommendations">Agent Workflow for HTML UI/UX Design — Research &amp; Recommendations</h1>
+<p>A synthesis of how traditional UI/UX designers work, why AI-generated UIs feel like "slop," and a concrete proposal for an agent workflow that produces grounded, non-generic HTML mockups.</p>
+<hr />
+<h2 id="1howtraditionaluiuxdesignersactuallywork">1. How traditional UI/UX designers actually work</h2>
+<p>Most credible sources describe a five-phase loop: <strong>Discover → Define → Design → Validate → Hand off</strong>. The artifacts produced at each phase are well-codified and they map almost 1:1 to inputs/outputs an agent pipeline can consume.</p>
+<h3 id="11phasebyphaseartifacts">1.1 Phase-by-phase artifacts</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Purpose</th>
+<th>Canonical deliverables</th>
+<th>Fidelity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Discover</td>
+<td>Understand user + business</td>
+<td>Stakeholder/design brief, interviews, competitive audit, jobs-to-be-done (JTBD), personas, empathy maps</td>
+<td>text/data</td>
+</tr>
+<tr>
+<td>Define</td>
+<td>Frame the problem</td>
+<td>Problem statement, user journey map, information architecture (sitemap), user flows, content model</td>
+<td>diagrams</td>
+</tr>
+<tr>
+<td>Design (UX)</td>
+<td>Structure</td>
+<td><strong>Sketches → wireframes</strong> (grayscale, structural, no brand)</td>
+<td>low-fi</td>
+</tr>
+<tr>
+<td>Design (UI)</td>
+<td>Surface</td>
+<td><strong>Mockups</strong> (typography, color, imagery, brand)</td>
+<td>high-fi</td>
+</tr>
+<tr>
+<td>Validate</td>
+<td>De-risk</td>
+<td><strong>Prototypes</strong> (clickable), usability tests, heuristic evaluation</td>
+<td>interactive</td>
+</tr>
+<tr>
+<td>Hand off</td>
+<td>Build</td>
+<td>Redlines / specs, <strong>design system / style guide</strong>, tokens, component library</td>
+<td>machine-readable</td>
+</tr>
+</tbody>
+</table>
+<p>Sources: Interaction Design Foundation's "14 UX Deliverables", Magic Patterns' "Wireframe vs Mockup vs Prototype", MobiDev's UX process guide, UX Playbook.</p>
+<h3 id="12twocrosscuttingframeworks">1.2 Two cross-cutting frameworks</h3>
+<ul>
+<li><strong>Atomic Design (Brad Frost)</strong> — UI as a hierarchy: <em>atoms → molecules → organisms → templates → pages</em>. With design tokens added as a "subatomic" layer. This is the single most useful mental model for agents because it gives composable, addressable units.</li>
+<li><strong>Jobs-to-Be-Done (Clayton Christensen / Tony Ulwick)</strong> — describe what the user is trying to <em>accomplish</em>, not who they are demographically. Personas are richer wrappers but the JTBD nucleus is what actually steers design decisions (NN/g).</li>
+</ul>
+<h3 id="13inputsthatexperienceddesignersrefusetoskip">1.3 Inputs that experienced designers refuse to skip</h3>
+<ol>
+<li><strong>A real problem statement</strong> ("X user, doing Y task, in Z context, fails because…").</li>
+<li><strong>Real content</strong> — copy, data, edge-case states, error messages. Designing with lorem ipsum is widely treated as malpractice.</li>
+<li><strong>Brand attributes</strong> — voice, mood, references, anti-references ("not this").</li>
+<li><strong>Constraints</strong> — platform, accessibility level (WCAG AA/AAA), tech stack, performance budget.</li>
+</ol>
+<p>These are exactly the inputs an agent system also needs. Most "slop" comes from skipping them.</p>
+<hr />
+<h2 id="2theoreticalphilosophicalfoundationstoencode">2. Theoretical / philosophical foundations to encode</h2>
+<p>You want agents that <em>reason like a designer</em>, not pattern-match. That means encoding principles, not just examples.</p>
+<h3 id="21thecanon7frameworks">2.1 The canon (~7 frameworks)</h3>
+<ol>
+<li><strong>Nielsen's 10 Usability Heuristics</strong> — visibility of status, match to real world, user control, consistency, error prevention, recognition over recall, flexibility, minimalist aesthetic, error recovery, help. <em>Universal checklist.</em></li>
+<li><strong>Gestalt principles</strong> — proximity, similarity, closure, continuation, common region, figure/ground, common fate. <em>Govern visual grouping.</em> (NN/g)</li>
+<li><strong>Don Norman's interaction model</strong> — affordances, signifiers, mapping, feedback, constraints, conceptual model, discoverability.</li>
+<li><strong>UX Laws</strong> (Parallel HQ reference):</li>
+</ol>
+<ul>
+<li><strong>Hick's</strong> — choice time grows with options → trim menus.</li>
+<li><strong>Fitts's</strong> — target time = f(distance, size) → big primary CTAs.</li>
+<li><strong>Miller's</strong> — ~7 chunks of working memory → chunk content.</li>
+<li><strong>Jakob's</strong> — users expect your site to work like the ones they already use.</li>
+<li><strong>Von Restorff</strong> — distinct item is remembered → use sparingly for primary action.</li>
+<li><strong>Tesler's</strong> — irreducible complexity must live somewhere (system or user).</li>
+<li><strong>Postel's</strong> — accept liberally, output strictly (forms).</li>
+</ul>
+<ol>
+<li><strong>Visual design pillars</strong> — hierarchy, scale, balance, contrast, rhythm.</li>
+<li><strong>Atomic Design + Design Tokens</strong> — composition + theming.</li>
+<li><strong>Refactoring UI (Wathan/Schoger)</strong> — pragmatic rules:</li>
+</ol>
+<ul>
+<li>Start with a feature, not a layout.</li>
+<li>Design in grayscale first; add color last.</li>
+<li>Establish hierarchy via <em>size, weight, color contrast, spacing</em> — not decoration.</li>
+<li>De-emphasize supporting content rather than over-emphasizing primary.</li>
+<li>Don't use pure gray text on colored backgrounds; tint towards the background.</li>
+<li>Work in cycles; build the real thing early.</li>
+</ul>
+<h3 id="22thephilosophicalposture">2.2 The philosophical posture</h3>
+<p>These framings are what separate "design-literate" agents from "image-generator with HTML output":</p>
+<ul>
+<li><strong>Form follows function.</strong> Every visual choice must justify itself against a user task.</li>
+<li><strong>Hierarchy is the master skill.</strong> Most "bad design" is not ugliness, it's flat hierarchy.</li>
+<li><strong>Constraints generate creativity.</strong> A fixed spacing scale, type scale, and 4–6 color ramp produces <em>more</em> coherent designs than freedom does. (This is the Tailwind/Refactoring UI thesis.)</li>
+<li><strong>Content is the design.</strong> Layouts shaped around real copy and real data; never the inverse.</li>
+<li><strong>Brand is what's <em>not</em> generic.</strong> Brand attributes are <em>constraints that exclude defaults</em>. Encode anti-patterns as explicitly as patterns.</li>
+<li><strong>Critique is not optional.</strong> A separate evaluating mind (or agent) catches what the producing mind cannot. Heuristic evaluation is standard practice; replicate it in the loop.</li>
+<li><strong>The agent is a junior designer; the human is the art director.</strong> (A framing widely shared in current practitioner discourse — see Ashok Naik, Stuti Mazumdar.)</li>
+</ul>
+<hr />
+<h2 id="3whyaigenerateduilookslikeslopandwhatcausesit">3. Why AI-generated UI looks like slop (and what causes it)</h2>
+<p>A clear consensus across recent practitioner write-ups (think.design, Hashbyt, dev.to/a_shokn, Medium/Mageswari):</p>
+<p><strong>Visual tells of AI slop</strong></p>
+<ul>
+<li>Purple → blue gradients, glassmorphism cards, soft-pastel voids</li>
+<li>Faceless 3D illustrations with floating geometric shapes</li>
+<li>Inter/Roboto everywhere, generous whitespace covering thin content</li>
+<li>Card-grid layouts regardless of content type</li>
+<li>Decorative gradients/shadows replacing real hierarchy</li>
+<li>Hardcoded values rather than tokens; no real component architecture</li>
+</ul>
+<p><strong>Root causes</strong></p>
+<ol>
+<li><strong>Pattern collapse</strong> — LLMs/diffusion models converge on the modal training-set design.</li>
+<li><strong>Missing context</strong> — no real brand, no JTBD, no content → model fills with defaults.</li>
+<li><strong>No critique loop</strong> — one-shot generation, no evaluation pass.</li>
+<li><strong>Decoration over function</strong> — model optimizes for "looks finished," not "works."</li>
+<li><strong>No design tokens / no system</strong> — every screen is invented from scratch.</li>
+</ol>
+<p><strong>Implication for your workflow:</strong> the anti-slop machinery is <em>upstream context</em> + <em>downstream critique</em>, not better prompting alone.</p>
+<hr />
+<h2 id="4whatcurrentleadingtoolsdoandthegaptoexploit">4. What current leading tools do (and the gap to exploit)</h2>
+<ul>
+<li><strong>v0 (Vercel) + shadcn registry</strong> — passes a structured <strong>registry</strong> (JSON describing components, blocks, and tokens) into the model so generations align with a real design system. (<a href="https://v0.app/docs/design-systems" rel="noopener noreferrer" target="_blank">v0 docs</a>). This is the most promising production pattern.</li>
+<li><strong>DTCG / W3C Design Tokens spec</strong> — a stable JSON format for tokens, now exportable from Figma natively. Use this as your source of truth.</li>
+<li><strong>Style Dictionary</strong> — transforms DTCG tokens into CSS variables / Tailwind / SCSS / iOS / Android.</li>
+<li><strong>Relume, Magic Patterns, Google Stitch, Figma Make</strong> — prompt-to-screen tools; all good for ideation, all weak on systematic consistency and brand fit.</li>
+<li><strong>Academic work</strong> (arXiv 2412.20071, "Towards Human-AI Synergy in UI Design") — argues the missing piece is <em>iterative collaboration with intent clarification</em>, not bigger one-shot models. Aligns with the critique-loop posture.</li>
+</ul>
+<p><strong>The gap:</strong> existing tools either generate one-shot UI without a system, or generate with a system but with no design reasoning. A multi-agent workflow that explicitly does <em>brief → IA → wireframe → mockup → critique</em> against an encoded design system has not been productized well — which is your opportunity.</p>
+<hr />
+<h2 id="5recommendedarchitectureforyourworkflow">5. Recommended architecture for your workflow</h2>
+<p>A pipeline of specialized agents, each producing a typed artifact, with a critique loop. HTML is the final medium, but <strong>intermediate artifacts are structured (YAML/JSON/MD) so each step is reviewable, replayable, and grounded</strong>.</p>
+<pre><code>┌──────────────┐   ┌──────────┐   ┌────────────┐   ┌──────────┐   ┌─────────┐
+│  Intake/     │──▶│ IA &amp;     │──▶│ Content    │──▶│Wireframer│──▶│ Mockup  │
+│  Brief Agent │   │ Flow     │   │ Strategist │   │ (lo-fi)  │   │ (hi-fi) │
+└──────────────┘   └──────────┘   └────────────┘   └──────────┘   └────┬────┘
+        ▲                                                              │
+        │                                                              ▼
+        │            ┌───────────────┐     ┌────────────────┐    ┌──────────┐
+        └────────────│ Revision      │◀────│ Critic +       │◀───│ A11y     │
+                     │ Orchestrator  │     │ Slop Detector  │    │ Checker  │
+                     └───────────────┘     └────────────────┘    └──────────┘
+                                                  │
+                                                  ▼ (pass threshold)
+                                            ┌──────────┐
+                                            │ Handoff  │
+                                            │ (HTML +  │
+                                            │ spec)    │
+                                            └──────────┘
+</code></pre>
+<p><strong>Shared knowledge base (read by all agents):</strong></p>
+<ul>
+<li><code>principles.md</code> — your house design philosophy + anti-patterns</li>
+<li><code>tokens.json</code> — DTCG-format design tokens</li>
+<li><code>components.json</code> — shadcn-style component registry</li>
+<li><code>brand.md</code> — voice, tone, references, anti-references</li>
+<li><code>critique-rubric.yaml</code> — evaluation criteria</li>
+</ul>
+<h3 id="51suggestedartifactformats">5.1 Suggested artifact formats</h3>
+<p><strong><code>brief.yaml</code></strong> (input)</p>
+<pre><code class="yaml language-yaml">product: "Habit tracker for new parents"
+primary_user:
+  description: "Sleep-deprived first-time parent, 28-38, mobile-first"
+  jtbd: "When my baby naps unpredictably, I want to log feeds/sleep in &lt;5s, so I can spot patterns without it becoming another chore."
+problem: "Existing apps require too many taps; designed for product managers, not exhausted parents."
+success_criteria:
+  - "Log a feed in under 5 seconds, one-handed"
+  - "Glanceable daily summary"
+constraints:
+  platform: "mobile web first"
+  a11y: "WCAG AA"
+  tech: "HTML + Tailwind, no JS framework"
+brand:
+  attributes: [calm, competent, warm, not-cute]
+  references_good: ["Linear's restraint", "Things 3's typography"]
+  references_bad: ["pastel baby apps", "gamified streak UIs"]
+out_of_scope: ["social features", "AI suggestions"]
+</code></pre>
+<p><strong><code>tokens.json</code></strong> — DTCG format (<a href="https://tr.designtokens.org/format/" rel="noopener noreferrer" target="_blank">spec</a>)</p>
+<pre><code class="json language-json">{
+  "color": {
+    "ink": { "$value": "#1a1a1a", "$type": "color" },
+    "paper": { "$value": "#fafaf7", "$type": "color" },
+    "accent": { "$value": "#3a5a40", "$type": "color" }
+  },
+  "space": {
+    "1": { "$value": "4px", "$type": "dimension" },
+    "2": { "$value": "8px", "$type": "dimension" }
+  },
+  "type": {
+    "scale": {
+      "body": { "$value": { "fontSize": "16px", "lineHeight": "1.5" } }
+    }
+  }
+}
+</code></pre>
+<p><strong><code>components.json</code></strong> — registry of allowed primitives (subset of shadcn schema). Agents are forbidden from inventing new ones; they may compose.</p>
+<p><strong><code>flows.yaml</code></strong> — screens, states, transitions.</p>
+<p><strong><code>content/&lt;screen&gt;.md</code></strong> — real copy, real data, empty/error/loading states explicitly written out.</p>
+<p><strong><code>critique-rubric.yaml</code></strong> — see §5.3.</p>
+<h3 id="52whateachagentdoes">5.2 What each agent does</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Reads</th>
+<th>Produces</th>
+<th>Hard rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Intake</strong></td>
+<td>user request</td>
+<td><code>brief.yaml</code></td>
+<td>Must extract JTBD + brand anti-references; ask if missing.</td>
+</tr>
+<tr>
+<td><strong>IA/Flow</strong></td>
+<td>brief</td>
+<td><code>flows.yaml</code>, screen list</td>
+<td>Each screen labelled with primary task + secondary tasks.</td>
+</tr>
+<tr>
+<td><strong>Content Strategist</strong></td>
+<td>brief, flows, brand voice</td>
+<td><code>content/*.md</code></td>
+<td>No lorem. Include empty/error/loading states. Voice matches brand.</td>
+</tr>
+<tr>
+<td><strong>Wireframer</strong></td>
+<td>flows, content, components</td>
+<td>grayscale HTML per screen</td>
+<td><strong>No color, no images, no gradients.</strong> Hierarchy via type scale, spacing, weight only. (Refactoring UI rule.)</td>
+</tr>
+<tr>
+<td><strong>Mockup</strong></td>
+<td>wireframe, tokens, components</td>
+<td>final HTML</td>
+<td>May only use tokens + registered components. No inline magic values.</td>
+</tr>
+<tr>
+<td><strong>A11y Checker</strong></td>
+<td>mockup HTML</td>
+<td>report</td>
+<td>WCAG AA: contrast ratios, focus order, semantic landmarks, alt text, label/input pairing.</td>
+</tr>
+<tr>
+<td><strong>Critic / Slop Detector</strong></td>
+<td>mockup, brief, rubric</td>
+<td>scored report + issue list</td>
+<td>See §5.3.</td>
+</tr>
+<tr>
+<td><strong>Revision Orchestrator</strong></td>
+<td>critic report</td>
+<td>routes back to wireframer or mockup</td>
+<td>Stops when rubric score ≥ threshold or 3 iterations.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53thecritiquerubricthemostimportantfile">5.3 The critique rubric (the most important file)</h3>
+<p>This is where your taste lives. Make it explicit so agents can apply it.</p>
+<pre><code class="yaml language-yaml">heuristics:           # Nielsen — block on any failure
+  - visibility_of_status
+  - match_to_real_world
+  - user_control_freedom
+  - consistency_standards
+  - error_prevention
+  - recognition_over_recall
+  - flexibility_efficiency
+  - minimalist_aesthetic
+  - error_recovery
+  - help_documentation
+
+gestalt:              # weight 1 each
+  proximity: "Related items closer than unrelated. Inspect padding/margin."
+  similarity: "Same-role items share visual treatment."
+  common_region: "Containers used only when grouping needs reinforcement."
+  figure_ground: "Primary action separable from background."
+
+visual_pillars:
+  hierarchy:
+    test: "Squint test: can a viewer rank importance of top 5 elements in 3 seconds?"
+  scale:
+    test: "Is the type scale limited to ≤6 steps from tokens?"
+  contrast:
+    test: "Is the primary CTA the highest-contrast interactive element on screen?"
+  spacing:
+    test: "All margins/paddings drawn from spacing scale tokens (no magic px)."
+
+ux_laws:
+  hicks: "Primary screens ≤7 top-level choices."
+  fittss: "Primary CTA ≥44px touch target; not adjacent to destructive actions."
+  jakobs: "Conventions for nav, search, cart, etc. only deviated from with explicit justification."
+
+brand_fit:
+  attributes_must_be_present: ["from brief.brand.attributes"]
+  anti_references_must_be_absent: ["from brief.brand.references_bad"]
+
+slop_detectors:       # block list — fail if any are true without explicit justification
+  - "Purple-to-blue gradient on hero"
+  - "Glassmorphism / backdrop-blur on &gt;2 surfaces"
+  - "Generic 3D human illustration"
+  - "More than 3 gradients on the page"
+  - "Card grid used when content is not card-like (e.g. an article)"
+  - "Default Inter/Roboto with no type personality"
+  - "Decorative shadow with no elevation meaning"
+  - "Lorem ipsum or placeholder copy present"
+  - "Hardcoded hex/px not present in tokens"
+  - "Primary CTA contrast &lt; AA"
+
+content_quality:
+  - "Empty state present and useful"
+  - "Error state present and actionable"
+  - "Loading state present"
+  - "Microcopy matches brand voice attributes"
+</code></pre>
+<p>The critic agent returns scores + a structured issue list. The orchestrator loops until pass or max iterations, surfacing remaining issues to the human.</p>
+<h3 id="54operatingprinciplesencodedassystempromptboilerplate">5.4 Operating principles (encoded as system-prompt boilerplate)</h3>
+<p>Bake these into every agent's system prompt:</p>
+<ol>
+<li><em>Function before form.</em> Every visual decision must reference a task or hierarchy goal.</li>
+<li><em>Tokens are the only source of color, spacing, and type.</em> If you need something not in tokens, request it; do not invent.</li>
+<li><em>Wireframe in grayscale.</em> Color is applied only at the mockup stage.</li>
+<li><em>Show real content.</em> Never lorem; never <code>[image]</code>.</li>
+<li><em>Declare states.</em> For every interactive screen: default, hover/focus, empty, error, loading.</li>
+<li><em>No defaults.</em> Justify each pattern by JTBD or convention (Jakob's law). If neither, replace it.</li>
+<li><em>Cite anti-references.</em> Before finalizing, list 3 things you specifically did <em>not</em> do because of brand anti-references.</li>
+</ol>
+<h3 id="55whystructuredintermediateartifactsoneshothtml">5.5 Why structured intermediate artifacts &gt; one-shot HTML</h3>
+<ul>
+<li><strong>Reviewability</strong> — humans can correct at the cheapest stage (a YAML brief, not a 500-line HTML).</li>
+<li><strong>Replayability</strong> — fix the brief, regenerate the rest deterministically.</li>
+<li><strong>Composability</strong> — swap models per agent (cheap for wireframe, strong for critic).</li>
+<li><strong>Auditable taste</strong> — your rubric is version-controlled and improves over time.</li>
+</ul>
+<hr />
+<h2 id="6phasedbuildplan">6. Phased build plan</h2>
+<p><strong>Phase 0 — Manual encoding (1–2 days, highest leverage)</strong></p>
+<ul>
+<li>Write <code>principles.md</code>, <code>critique-rubric.yaml</code>, <code>brand.md</code> starter, <code>tokens.json</code> (steal a sensible default and adapt), <code>components.json</code> (use shadcn registry as base).</li>
+<li>These three files <em>are</em> your design system. Without them, no agent helps.</li>
+</ul>
+<p><strong>Phase 1 — Single-agent critic (1 day)</strong></p>
+<ul>
+<li>Take any existing HTML mockup, run it through the critic agent against the rubric. Iterate on the rubric until its scores match your gut.</li>
+<li>This validates your taste codification before building the producer pipeline.</li>
+</ul>
+<p><strong>Phase 2 — Linear pipeline (3–5 days)</strong></p>
+<ul>
+<li>Build Intake → IA → Content → Wireframer → Mockup → Critic, each as a separate prompt + tool, sharing the knowledge base.</li>
+<li>Persist intermediate artifacts to disk; allow human edit between any two steps.</li>
+</ul>
+<p><strong>Phase 3 — Critique loop (2 days)</strong></p>
+<ul>
+<li>Add Revision Orchestrator; tune threshold.</li>
+<li>Add A11y Checker (can be a deterministic linter — axe-core in CI — not an LLM).</li>
+</ul>
+<p><strong>Phase 4 — Library growth</strong></p>
+<ul>
+<li>Every accepted output: extract patterns, add new components to registry, refine rubric.</li>
+<li>Over time the system gets more <em>yours</em> and less generic — the opposite of pattern collapse.</li>
+</ul>
+<hr />
+<h2 id="7specificrecommendationsforyourcase">7. Specific recommendations for your case</h2>
+<ol>
+<li><strong>Adopt DTCG + Style Dictionary + a shadcn-style registry as your base.</strong> It's the only standardized format that bridges design tools, code, and AI assistants today.</li>
+<li><strong>Treat the rubric as your moat.</strong> Your house critique rubric — especially the anti-slop and brand-fit sections — is the single artifact that prevents you from producing average output.</li>
+<li><strong>Force a grayscale wireframe step.</strong> It is the most reliable trick for keeping hierarchy honest, taken directly from Refactoring UI. Skipping it is the #1 cause of pretty-but-flat AI output.</li>
+<li><strong>Never let agents write copy and design simultaneously.</strong> Separate content strategist agent first, then design around the actual words. This is how senior designers work and it eliminates a huge slop category.</li>
+<li><strong>Make the critic a different model / different system prompt than the producer.</strong> Generating and judging in the same context biases towards self-confirmation.</li>
+<li><strong>Keep the human in the loop at three checkpoints</strong>: after the brief, after wireframe, after final mockup. Not in between.</li>
+<li><strong>Start narrow.</strong> Pick one product domain (e.g. SaaS dashboards, or marketing pages, or admin tools). The rubric and components for "any UI" are too vague to be useful. Specialization is how you escape the generic.</li>
+</ol>
+<hr />
+<h2 id="8furtherreadingcurated">8. Further reading (curated)</h2>
+<p><strong>Foundational</strong></p>
+<ul>
+<li>Brad Frost — <em>Atomic Design</em> (atomicdesign.bradfrost.com) and his blog post on tokens + atomic design.</li>
+<li>Adam Wathan &amp; Steve Schoger — <em>Refactoring UI</em> (refactoringui.com).</li>
+<li>Don Norman — <em>The Design of Everyday Things</em>.</li>
+<li>NN/g — Nielsen heuristics, Gestalt videos, Personas vs JTBD article.</li>
+<li>Parallel HQ — <em>UX Laws & Design Principles</em> reference guide.</li>
+</ul>
+<p><strong>Agent / AI angle</strong></p>
+<ul>
+<li>arXiv 2412.20071 — "Towards Human-AI Synergy in UI Design" — intent clarification + iterative refinement framework.</li>
+<li>v0 docs — <em>Design Systems</em> page (registry concept).</li>
+<li>DTCG / W3C Design Tokens Community Group spec.</li>
+<li>Style Dictionary docs.</li>
+</ul>
+<p><strong>Critique of current state</strong></p>
+<ul>
+<li>Ashok Naik — "How to Break the AI-Generated UI Curse" (dev.to).</li>
+<li>Stuti Mazumdar — "When Generated UI Actually Works" (think.design).</li>
+<li>Mageswari — "Why Your AI-Generated UI Looks Like Everyone Else's" (Medium).</li>
+</ul>
+<hr />
+<h2 id="tldr">TL;DR</h2>
+<p>The reason AI-generated UI feels generic is not weak models — it's missing upstream context (real brief, real content, real brand, real design system) and missing downstream critique (no evaluating second mind). Traditional designers solve both by working in a phased pipeline of <em>typed artifacts</em>: brief → JTBD → IA → wireframe (grayscale, hierarchy-first) → mockup (tokens-only) → critique → handoff. You can mirror that pipeline as a multi-agent workflow with structured YAML/JSON between steps and HTML only as the final medium. The two artifacts that will most differentiate your system from every other AI UI tool are:</p>
+<ol>
+<li>A <strong>design system</strong> (tokens + component registry + brand voice + anti-references), and</li>
+<li>A <strong>critique rubric</strong> that encodes Nielsen + Gestalt + Refactoring UI rules + your explicit anti-slop block list.</li>
+</ol>
+<p>Build those two first. The agents are mostly orchestration around them.</p>
+    <footer class="source-footer">
+      Generated by <strong>pi markdown-to-html</strong>
+    </footer>
+  </article>
+</body>
+</html>

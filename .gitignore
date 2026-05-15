@@ -1,0 +1,5 @@
+# Agent communications (transient, not part of the repo)
+.agentcomms/
+
+# Sandbox (transient execution environment)
+.sandbox/
