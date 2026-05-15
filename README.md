@@ -132,6 +132,26 @@ gh skill install beneathatree/skills mock
 
 Clone or copy `skills/design-init/SKILL.md` and `skills/mock/SKILL.md` into your agent's skills directory.
 
+## Updating
+
+Skills evolve. When a new version is released, update based on how you installed:
+
+**Via skills.sh:**
+```bash
+npx skills update          # updates all installed skills
+# or reinstall to force the latest:
+npx skills add beneathatree/skills
+```
+
+**Via gh skill:**
+```bash
+gh skill update            # checks for updates across installed skills
+```
+
+**Manually:** Pull or re-clone the repo, then copy the updated SKILL.md files over your existing ones.
+
+> **Note:** By default, `npx skills` always installs the latest commit on `main`. If you need version pinning (e.g., lock to v1.0.0), use `gh skill install --pin v1.0.0` instead.
+
 ## What You Need
 
 - An AI coding agent that supports SKILL.md files
