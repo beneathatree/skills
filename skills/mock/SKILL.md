@@ -48,7 +48,8 @@ produces:
 2. **Accepts a brief** — the user describes what screen or page they need.
 3. **Conditionally interviews back** — if the brief is thin/ambiguous, asks 3–6 targeted questions *before* generating anything.
 4. **Produces 2–3 HTML iterations** — each a different approach (layout strategy, density, hierarchy emphasis). All use only tokens from DESIGN.md.
-5. **User picks one** — chosen iteration is frozen as a production-viable scaffold in `accepted/`.
+5. **Visually reviews each iteration** — renders in a real browser via agent-browser, catches rendering issues, validates against design principles, and fixes problems before the user ever sees them.
+6. **User picks one** — chosen iteration is frozen as a production-viable scaffold in `accepted/`.
 
 ---
 
@@ -248,7 +249,112 @@ Before showing iterations to the user, verify every item on this checklist:
 
 ---
 
-## Step 3: Slop Prevention (Baked Into Generation)
+## Step 3: Visual Review via Agent-Browser
+
+> **Conditional step.** If `agent-browser` is installed and available on the system PATH, run this automated visual review pass before presenting iterations to the user. If agent-browser is not available, skip this step gracefully and proceed to presentation -- the skill works fine without it.
+
+### Why This Step Exists
+
+Code that looks correct in a text editor can render surprisingly wrong in a browser. CSS custom properties might not cascade as expected, responsive breakpoints might collapse awkwardly, contrast ratios that look fine in theory might fail in practice, and layout assumptions ("this will fit side by side") break at real viewport sizes.
+
+This step catches those problems **before** the user sees them. It turns "here are some mocks, hope they work" into "here are some mocks, verified to render correctly."
+
+### Availability Check
+
+```bash
+# Check if agent-browser is available
+agent-browser --version
+```
+
+- If this succeeds: run the full review pass below.
+- If this fails (command not found): skip to Step 6 (Present and Select). Do not error. Do not prompt the user to install anything. The skill degrades gracefully.
+
+### Review Process (Per Iteration)
+
+For each HTML file (`mocks/<slug>-v1.html`, `v2.html`, `v3.html`):
+
+#### 3a. Open and Capture
+
+```bash
+# Open the file in agent-browser (waits for page load)
+agent-browser open mocks/<slug>-vN.html
+
+# Capture desktop view (1440x900)
+agent-browser resize open --width 1440 --height 900
+agent-browser screenshot open --path mocks/reviews/<slug>-vN-desktop.png
+agent-browser snapshot open > mocks/reviews/<slug>-vN-desktop-snapshot.txt
+
+# Capture mobile view (375x812)
+agent-browser resize open --width 375 --height 812
+agent-browser screenshot open --path mocks/reviews/<slug>-vN-mobile.png
+agent-browser snapshot open > mocks/reviews/<slug>-vN-mobile-snapshot.txt
+```
+
+Create the `mocks/reviews/` directory if it doesn't exist. Keep screenshots and snapshots -- they serve as an audit trail.
+
+#### 3b. Rendering Validation
+
+Inspect each screenshot and snapshot for:
+
+| Check | What You Look For | Fix If...
+|---|---|---|
+| **Layout integrity** | No overlapping elements, no content overflow, no horizontal scrollbars on body | Elements spill outside containers → fix width/overflow CSS |
+| **Responsive behavior** | Mobile view is usable (not just shrunken desktop), content reflows logically | Mobile is unreadable or broken → fix media queries |
+| **Font rendering** | Web fonts loaded (or fallback applied), no FOUT/FOIT artifacts, text is legible at both sizes | Fonts missing or tiny → check font-stack, adjust sizes within token bounds |
+| **Color fidelity** | Colors match DESIGN.md tokens (compare hex values visually), sufficient contrast | Colors look wrong → verify CSS custom property mappings |
+| **Spacing rhythm** | Spacing looks consistent, no random gaps or cramping | Inconsistent spacing → verify all values come from spacing tokens |
+| **Interactive elements** | Buttons look clickable (sufficient size, visible borders/backgrounds), inputs look like inputs | Flat/unclickable-looking controls → add border/background/spacing per component tokens |
+| **Image placeholders** | Alt text visible or decorative images have reasonable fallback dimensions | Broken image icons or collapsed areas → add explicit dimensions + alt text |
+| **Console errors** | Check for any JavaScript errors (even though our HTML is static, inline JS mistakes can happen) | Errors present → remove or fix the problematic code |
+
+#### 3c. Design Principles Audit
+
+Now look at each screenshot through the lens of the design principles. Ask these questions:
+
+**Hierarchy (the squint test):**
+> Blur your eyes looking at the screenshot. Can you rank the top 5 elements by importance in 3 seconds? If not, the hierarchy is flat. Fix by increasing size/weight/contrast of primary elements OR decreasing secondary ones (prefer the latter -- de-emphasize, don't over-emphasize).
+
+**Gestalt grouping:**
+> Are related items visually grouped? Are unrelated items separated? Does your eye know where to land first? If grouping is ambiguous, adjust spacing (use tighter tokens for related items, looser tokens for groups).
+
+**Anti-reference check:**
+> Look at the screenshot. Would the anti-references listed in PRODUCT.md hate this? Does it look like something you explicitly said NOT to build? If yes, revise before presenting.
+
+**Slop scan:**
+> Run through the slop catalog one more time with the rendered output in front of you. Purple-blue gradients? Glassmorphism? Card-in-card nesting? Icon tiles above headings? Flat type hierarchy? These are easier to spot in a rendered screenshot than in source code.
+
+**Token compliance:**
+> Pick any 3 visual elements from the screenshot. Trace each back to a DESIGN.md token. Can you identify which token produced each value? If you find a value you cannot trace back to a token, it's a magic value -- fix it.
+
+#### 3d. Fix Loop
+
+For every issue found in 3b or 3c:
+
+1. **Categorize severity:**
+   - **Critical:** Layout broken, content unreadable, responsive collapse, console errors. Must fix before presenting.
+   - **Important:** Hierarchy flat, anti-reference violation, slop pattern present, token violation. Must fix before presenting.
+   - **Minor:** Spacing slightly off, could be tighter/looser, aesthetic preference. Note it but don't block presentation. Mention to user if relevant.
+
+2. **Fix critical and important issues directly** in the HTML file. Regenerate the screenshot to confirm the fix.
+
+3. **Limit fix iterations to 2 rounds maximum** per iteration file. If a problem persists after 2 attempts, note it as a known issue when presenting to the user. Don't loop infinitely.
+
+4. **After all fixes**, take a final set of screenshots (desktop + mobile) for the canonical version the user will see.
+
+### Review Summary (Internal)
+
+After reviewing all iterations, you should have a clear picture:
+
+- Which iteration(s) passed review cleanly
+- Which iteration(s) needed fixes and what was fixed
+- Any known issues remaining (minor)
+- A recommendation (if one iteration is clearly stronger after visual review)
+
+This summary informs how you present the options in Step 6. You don't hide the review process from the user -- if fixes were made, say so briefly: "v2 needed a spacing adjustment after visual review." This builds trust.
+
+---
+
+## Step 4: Slop Prevention (Baked Into Generation)
 
 These are **generation constraints**, not post-hoc checks. The skill avoids producing these patterns the same way a trained designer knows not to.
 
@@ -297,7 +403,7 @@ These are **generation constraints**, not post-hoc checks. The skill avoids prod
 
 ---
 
-## Step 4: Product-Mode Generation Rules (Always Active)
+## Step 5: Product-Mode Generation Rules (Always Active)
 
 These rules govern every iteration you produce:
 
@@ -321,7 +427,7 @@ These rules govern every iteration you produce:
 
 ---
 
-## Step 5: Present and Select
+## Step 6: Present and Select
 
 After generating all iterations:
 
@@ -425,7 +531,12 @@ project/
 ├── mocks/
 │   ├── <screen>-v1.html   ← Your output (iteration 1)
 │   ├── <screen>-v2.html   ← Your output (iteration 2)
-│   └── <screen>-v3.html   ← Your output (iteration 3)
+│   ├── <screen>-v3.html   ← Your output (iteration 3)
+│   └── reviews/           ← Visual review artifacts (if agent-browser available)
+│       ├── <screen>-vN-desktop.png
+│       ├── <screen>-vN-mobile.png
+│       ├── <screen>-vN-desktop-snapshot.txt
+│       └── <screen>-vN-mobile-snapshot.txt
 └── accepted/
     └── <screen>.html      ← Frozen mock (after user picks one)
 ```
@@ -439,6 +550,7 @@ project/
 - **Not a Figma replacement.** Medium is HTML in browser. No canvas, no drag-and-drop, no vector tools.
 - **Not brand-mode design.** Optimized for product UI (tools, dashboards, interfaces). Marketing pages will be competent but not exceptional.
 - **Not a post-hoc slop detector.** Prevention is baked in. The skill doesn't produce slop — it doesn't need to catch it afterward.
+- **Not dependent on agent-browser.** The visual review step is a quality accelerator when available, but the skill works fully without it. Graceful degradation.
 - **Not a replacement for `/design-init`.** It consumes DESIGN.md and PRODUCT.md; it cannot create them.
 
 ---
